@@ -14,7 +14,7 @@ type Product struct {
 	ID        uint `gorm:"primary_key"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	Name string
+	Name      string
 }
 
 func (p *Product) tableName() string {
@@ -79,7 +79,7 @@ func TestNewAdapter(t *testing.T) {
 }
 
 func TestDatabase_SetLogMode_GetLogMode(t *testing.T) {
-	t.Run("should setLog corretly", func(t *testing.T) {
+	t.Run("should setLog correctly", func(t *testing.T) {
 		connection := instance.GetConnection("sqlite3", ":memory:")
 		adapter := NewAdapter(connection)
 		adapter.SetLogMode(true)
@@ -172,10 +172,10 @@ func TestDatabase_Update_Find(t *testing.T) {
 		var productList []Product
 
 		adapter := NewAdapter(connection)
-		response := adapter.Create(nil, product, product.tableName())
+		_ = adapter.Create(nil, product, product.tableName())
 
 		nameUpdated := uuid.New().String()
-		response = adapter.Update(nil, map[string]interface{}{
+		response := adapter.Update(nil, map[string]interface{}{
 			"id": 1,
 		}, &Product{
 			UpdatedAt: time.Now(),
@@ -183,7 +183,6 @@ func TestDatabase_Update_Find(t *testing.T) {
 		}, product.tableName())
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(1))
-
 
 		response = adapter.Find(nil, map[string]interface{}{}, &productList, product.tableName())
 		assert.NoError(t, response.Error())
@@ -201,10 +200,10 @@ func TestDatabase_Update_Find(t *testing.T) {
 		var productList []Product
 
 		adapter := NewAdapter(transaction)
-		response := adapter.Create(transaction, product, product.tableName())
+		_ = adapter.Create(transaction, product, product.tableName())
 
 		nameUpdated := uuid.New().String()
-		response = adapter.Update(transaction, map[string]interface{}{
+		response := adapter.Update(transaction, map[string]interface{}{
 			"id": 1,
 		}, &Product{
 			UpdatedAt: time.Now(),
@@ -224,7 +223,6 @@ func TestDatabase_Update_Find(t *testing.T) {
 	})
 }
 
-
 func TestDatabase_Delete_Find(t *testing.T) {
 	t.Run("should create product, update product e check if then not is equals", func(t *testing.T) {
 		product, connection := GetMemoryDatabase(false)
@@ -234,12 +232,12 @@ func TestDatabase_Delete_Find(t *testing.T) {
 		var productList []Product
 
 		adapter := NewAdapter(connection)
-		response := adapter.Create(nil, product, product.tableName())
+		_ = adapter.Create(nil, product, product.tableName())
 
-		response = adapter.Find(nil, map[string]interface{}{}, &productList, product.tableName())
+		response := adapter.Find(nil, map[string]interface{}{}, &productList, product.tableName())
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(1))
-		assert.Len(t, productList,1)
+		assert.Len(t, productList, 1)
 
 		response = adapter.Delete(nil, map[string]interface{}{"id": 1}, product, product.tableName())
 		assert.NoError(t, response.Error())
@@ -248,7 +246,7 @@ func TestDatabase_Delete_Find(t *testing.T) {
 		response = adapter.Find(nil, map[string]interface{}{}, &productList, product.tableName())
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(0))
-		assert.Len(t, productList,0)
+		assert.Len(t, productList, 0)
 	})
 	t.Run("should create product, update product e check if then not is equals with transaction", func(t *testing.T) {
 		product, transaction := GetMemoryDatabase(true)
@@ -258,12 +256,12 @@ func TestDatabase_Delete_Find(t *testing.T) {
 		var productList []Product
 
 		adapter := NewAdapter(transaction)
-		response := adapter.Create(transaction, product, product.tableName())
+		_ = adapter.Create(transaction, product, product.tableName())
 
-		response = adapter.Find(transaction, map[string]interface{}{}, &productList, product.tableName())
+		response := adapter.Find(transaction, map[string]interface{}{}, &productList, product.tableName())
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(1))
-		assert.Len(t, productList,1)
+		assert.Len(t, productList, 1)
 
 		response = adapter.Delete(transaction, map[string]interface{}{"id": 1}, product, product.tableName())
 		assert.NoError(t, response.Error())
@@ -272,7 +270,7 @@ func TestDatabase_Delete_Find(t *testing.T) {
 		response = adapter.Find(transaction, map[string]interface{}{}, &productList, product.tableName())
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(0))
-		assert.Len(t, productList,0)
+		assert.Len(t, productList, 0)
 
 		transaction.Commit()
 	})

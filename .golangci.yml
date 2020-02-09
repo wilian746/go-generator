@@ -26,10 +26,6 @@ linters-settings:
     local-prefixes: github.com/golangci/golangci-lint
   golint:
     min-confidence: 0
-  gomnd:
-    settings:
-      mnd:
-        checks: argument,case,condition,return
   govet:
     check-shadowing: true
     settings:
@@ -61,9 +57,7 @@ linters:
     - gocritic
     - gocyclo
     - gofmt
-    - goimports
     - golint
-    - gomnd
     - goprintffuncname
     - gosec
     - gosimple
@@ -85,6 +79,11 @@ linters:
     - varcheck
     - whitespace
 
+issues:
+  exclude-rules:
+    - path: pkg/repository/instance/
+      linters:
+        - golint
 
 service:
   golangci-lint-version: 1.23.x

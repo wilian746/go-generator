@@ -3,7 +3,7 @@ package defaultresponse
 import "github.com/jinzhu/gorm"
 
 type DefaultResponse struct {
-	err error
+	err          error
 	rowsAffected int64
 }
 

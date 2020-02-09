@@ -7,7 +7,7 @@ import (
 
 type Database struct {
 	connection *gorm.DB
-	logMode bool
+	logMode    bool
 }
 
 type Interface interface {
@@ -18,10 +18,10 @@ type Interface interface {
 
 	ParseGormQueryToDefaultResponse(result *gorm.DB) *defaultresponse.DefaultResponse
 
-	Find(transaction *gorm.DB, condition interface{}, entity interface{}, tableName string) *defaultresponse.DefaultResponse
+	Find(transaction *gorm.DB, condition, entity interface{}, tableName string) *defaultresponse.DefaultResponse
 	Create(transaction *gorm.DB, entity interface{}, tableName string) *defaultresponse.DefaultResponse
-	Update(transaction *gorm.DB, condition interface{}, entity interface{}, tableName string) *defaultresponse.DefaultResponse
-	Delete(transaction *gorm.DB, condition interface{}, entity interface{}, tableName string) *defaultresponse.DefaultResponse
+	Update(transaction *gorm.DB, condition, entity interface{}, tableName string) *defaultresponse.DefaultResponse
+	Delete(transaction *gorm.DB, condition, entity interface{}, tableName string) *defaultresponse.DefaultResponse
 }
 
 func NewAdapter(connection *gorm.DB) Interface {
@@ -47,20 +47,20 @@ func (d *Database) ParseGormQueryToDefaultResponse(query *gorm.DB) *defaultrespo
 	return defaultresponse.NewDefaultResponse(query)
 }
 
-func (d *Database)  Find(transaction *gorm.DB, condition interface{}, entity interface{}, tableName string) *defaultresponse.DefaultResponse {
+func (d *Database) Find(transaction *gorm.DB, condition, entity interface{}, tableName string) *defaultresponse.DefaultResponse {
 	return d.ParseGormQueryToDefaultResponse(d.Connection(tableName).Where(condition).Find(entity))
 }
-func (d *Database)  Create(transaction *gorm.DB, entity interface{}, tableName string) *defaultresponse.DefaultResponse {
+func (d *Database) Create(transaction *gorm.DB, entity interface{}, tableName string) *defaultresponse.DefaultResponse {
 	connection := d.getDatabaseConnection(transaction, tableName)
 
 	return d.ParseGormQueryToDefaultResponse(connection.Create(entity))
 }
-func (d *Database)  Update(transaction *gorm.DB, condition interface{}, entity interface{}, tableName string) *defaultresponse.DefaultResponse {
+func (d *Database) Update(transaction *gorm.DB, condition, entity interface{}, tableName string) *defaultresponse.DefaultResponse {
 	connection := d.getDatabaseConnection(transaction, tableName)
 
 	return d.ParseGormQueryToDefaultResponse(connection.Where(condition).Updates(entity))
 }
-func (d *Database)  Delete(transaction *gorm.DB, condition interface{}, entity interface{}, tableName string) *defaultresponse.DefaultResponse {
+func (d *Database) Delete(transaction *gorm.DB, condition, entity interface{}, tableName string) *defaultresponse.DefaultResponse {
 	connection := d.getDatabaseConnection(transaction, tableName)
 
 	return d.ParseGormQueryToDefaultResponse(connection.Where(condition).Delete(entity))

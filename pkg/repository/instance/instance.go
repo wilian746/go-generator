@@ -11,14 +11,14 @@ import (
 )
 
 var ErrDialectInvalid = errors.New("dialect not valid")
-var ErrUriInvalid = errors.New("uri not valid")
+var ErrURIInvalid = errors.New("uri not valid")
 
-func GetConnection(dialectName string, uri string) *gorm.DB {
+func GetConnection(dialectName, uri string) *gorm.DB {
 	if !dialectIsAllowed(dialectName) {
 		logger.PANIC("Error", ErrDialectInvalid)
 	}
 	if uri == "" {
-		logger.PANIC("Error", ErrUriInvalid)
+		logger.PANIC("Error", ErrURIInvalid)
 	}
 
 	connection, err := gorm.Open(dialectName, uri)

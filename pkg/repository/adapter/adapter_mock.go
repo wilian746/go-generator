@@ -26,7 +26,7 @@ func (m *Mock) ParseGormQueryToDefaultResponse(result *gorm.DB) *defaultresponse
 	args := m.MethodCalled("ParseGormQueryToDefaultResponse")
 	return args.Get(0).(*defaultresponse.DefaultResponse)
 }
-func (m *Mock) Find(transaction *gorm.DB, condition interface{}, entity interface{}, tableName string) *defaultresponse.DefaultResponse {
+func (m *Mock) Find(transaction *gorm.DB, condition, entity interface{}, tableName string) *defaultresponse.DefaultResponse {
 	args := m.MethodCalled("Find")
 	return args.Get(0).(*defaultresponse.DefaultResponse)
 }
@@ -34,11 +34,11 @@ func (m *Mock) Create(transaction *gorm.DB, entity interface{}, tableName string
 	args := m.MethodCalled("Create")
 	return args.Get(0).(*defaultresponse.DefaultResponse)
 }
-func (m *Mock) Update(transaction *gorm.DB, condition interface{}, entity interface{}, tableName string) *defaultresponse.DefaultResponse {
+func (m *Mock) Update(transaction *gorm.DB, condition, entity interface{}, tableName string) *defaultresponse.DefaultResponse {
 	args := m.MethodCalled("Update")
 	return args.Get(0).(*defaultresponse.DefaultResponse)
 }
-func (m *Mock) Delete(transaction *gorm.DB, condition interface{}, entity interface{}, tableName string) *defaultresponse.DefaultResponse {
+func (m *Mock) Delete(transaction *gorm.DB, condition, entity interface{}, tableName string) *defaultresponse.DefaultResponse {
 	args := m.MethodCalled("Delete")
 	return args.Get(0).(*defaultresponse.DefaultResponse)
 }
