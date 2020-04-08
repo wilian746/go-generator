@@ -1,4 +1,4 @@
-package defaultresponse
+package response
 
 import (
 	"errors"
@@ -9,7 +9,7 @@ import (
 
 func TestNewDefaultResponse(t *testing.T) {
 	t.Run("should return equals type when create new default response", func(t *testing.T) {
-		assert.IsType(t, &DefaultResponse{}, NewDefaultResponse(&gorm.DB{}))
+		assert.IsType(t, &Response{}, NewDefaultResponse(&gorm.DB{}))
 	})
 }
 

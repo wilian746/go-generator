@@ -4,7 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
-	defaultresponse "github.com/wilian746/gorm-crud-generator/pkg/repository/default_response"
+	defaultresponse "github.com/wilian746/gorm-crud-generator/pkg/repository/response"
 	"github.com/wilian746/gorm-crud-generator/pkg/repository/instance"
 	"testing"
 	"time"
@@ -51,24 +51,24 @@ func TestMock(t *testing.T) {
 		assert.Equal(t, mock.Connection("product"), &gorm.DB{})
 	})
 	t.Run("should return expected value in mock of ParseGormQueryToDefaultResponse", func(t *testing.T) {
-		mock.On("ParseGormQueryToDefaultResponse").Return(&defaultresponse.DefaultResponse{})
-		assert.Equal(t, mock.ParseGormQueryToDefaultResponse(&gorm.DB{}), &defaultresponse.DefaultResponse{})
+		mock.On("ParseGormQueryToDefaultResponse").Return(&defaultresponse.Response{})
+		assert.Equal(t, mock.ParseGormQueryToDefaultResponse(&gorm.DB{}), &defaultresponse.Response{})
 	})
 	t.Run("should return expected value in mock of Find", func(t *testing.T) {
-		mock.On("Find").Return(&defaultresponse.DefaultResponse{})
-		assert.Equal(t, mock.Find(nil, map[string]interface{}{}, product, product.tableName()), &defaultresponse.DefaultResponse{})
+		mock.On("Find").Return(&defaultresponse.Response{})
+		assert.Equal(t, mock.Find(nil, map[string]interface{}{}, product, product.tableName()), &defaultresponse.Response{})
 	})
 	t.Run("should return expected value in mock of Create", func(t *testing.T) {
-		mock.On("Create").Return(&defaultresponse.DefaultResponse{})
-		assert.Equal(t, mock.Create(nil, product, product.tableName()), &defaultresponse.DefaultResponse{})
+		mock.On("Create").Return(&defaultresponse.Response{})
+		assert.Equal(t, mock.Create(nil, product, product.tableName()), &defaultresponse.Response{})
 	})
 	t.Run("should return expected value in mock of Update", func(t *testing.T) {
-		mock.On("Update").Return(&defaultresponse.DefaultResponse{})
-		assert.Equal(t, mock.Update(nil, map[string]interface{}{}, product, product.tableName()), &defaultresponse.DefaultResponse{})
+		mock.On("Update").Return(&defaultresponse.Response{})
+		assert.Equal(t, mock.Update(nil, map[string]interface{}{}, product, product.tableName()), &defaultresponse.Response{})
 	})
 	t.Run("should return expected value in mock of Delete", func(t *testing.T) {
-		mock.On("Delete").Return(&defaultresponse.DefaultResponse{})
-		assert.Equal(t, mock.Delete(nil, map[string]interface{}{}, product, product.tableName()), &defaultresponse.DefaultResponse{})
+		mock.On("Delete").Return(&defaultresponse.Response{})
+		assert.Equal(t, mock.Delete(nil, map[string]interface{}{}, product, product.tableName()), &defaultresponse.Response{})
 	})
 }
 
@@ -105,11 +105,11 @@ func TestDatabase_ParseGormQueryToDefaultResponse(t *testing.T) {
 	connection := instance.GetConnection("sqlite3", ":memory:")
 	connection.Table(product.tableName()).AutoMigrate(&Product{})
 
-	t.Run("should return response of type *defaultresponse.DefaultResponse", func(t *testing.T) {
+	t.Run("should return response of type *defaultresponse.Response", func(t *testing.T) {
 		adapter := NewAdapter(connection)
 		connection := adapter.Connection(product.tableName())
 
-		assert.IsType(t, &defaultresponse.DefaultResponse{}, adapter.ParseGormQueryToDefaultResponse(connection))
+		assert.IsType(t, &defaultresponse.Response{}, adapter.ParseGormQueryToDefaultResponse(connection))
 	})
 }
 

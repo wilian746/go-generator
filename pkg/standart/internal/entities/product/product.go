@@ -2,27 +2,27 @@ package product
 
 import (
 	"encoding/json"
-	"errors"
-	"io"
-	"time"
+	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/entities"
 )
 
 type Product struct {
-	ID        uint `gorm:"primary_key"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	Name      string
+	entities.Base
+	Name string
 }
 
-func ConvertIoReaderToStruct(data io.Reader) (body Product, err error) {
-	if data == nil {
-		return body, errors.New("body is invalid")
+func InterfaceToModel(data interface{}) (instance *Product, err error) {
+	bytes, err := json.Marshal(data)
+	if err != nil {
+		return instance, err
 	}
-	err = json.NewDecoder(data).Decode(&body)
-	return body, err
+
+	return instance, json.Unmarshal(bytes, instance)
 }
 
 func (p *Product) TableName() string {
 	return "products"
 }
 
+func (p *Product) Bytes() ([]byte, error) {
+	return json.Marshal(p)
+}
