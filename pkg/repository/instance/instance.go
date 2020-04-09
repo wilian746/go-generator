@@ -7,23 +7,23 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	"github.com/wilian746/gorm-crud-generator/internal/utils/logger"
+	"log"
 )
 
 var ErrDialectInvalid = errors.New("dialect not valid")
 var ErrURIInvalid = errors.New("uri not valid")
 
 func GetConnection(dialectName, uri string) *gorm.DB {
-	if !dialectIsAllowed(dialectName) {
-		logger.PANIC("Error", ErrDialectInvalid)
+	if !dialectIsAllowed(dialectName) && ErrDialectInvalid != nil {
+		log.Panic("Error", ErrDialectInvalid)
 	}
-	if uri == "" {
-		logger.PANIC("Error", ErrURIInvalid)
+	if uri == "" && ErrURIInvalid != nil {
+		log.Panic("Error", ErrURIInvalid)
 	}
 
 	connection, err := gorm.Open(dialectName, uri)
 	if err != nil {
-		logger.PANIC("Error on open connection", err)
+		log.Panic("Error on open connection", err)
 	}
 
 	return connection

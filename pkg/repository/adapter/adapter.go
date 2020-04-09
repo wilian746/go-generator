@@ -18,7 +18,7 @@ type Interface interface {
 
 	ParseGormQueryToDefaultResponse(result *gorm.DB) *response.Response
 
-	Find(condition, entity interface{}, tableName string) *response.Response
+	Find(transaction *gorm.DB, condition, entity interface{}, tableName string) *response.Response
 	Create(transaction *gorm.DB, entity interface{}, tableName string) *response.Response
 	Update(transaction *gorm.DB, condition, entity interface{}, tableName string) *response.Response
 	Delete(transaction *gorm.DB, condition, entity interface{}, tableName string) *response.Response
@@ -43,16 +43,22 @@ func (d *Database) Connection(tableName string) *gorm.DB {
 	return d.connection.New().Table(tableName).LogMode(d.logMode)
 }
 
-func (d *Database) addTransaction(query *gorm.DB) *response.Response {
-	return response.NewDefaultResponse(query)
-}
-
 func (d *Database) ParseGormQueryToDefaultResponse(query *gorm.DB) *response.Response {
 	return response.NewDefaultResponse(query)
 }
 
-func (d *Database) Find(condition, entity interface{}, tableName string) *response.Response {
-	return d.ParseGormQueryToDefaultResponse(d.Connection(tableName).Where(condition).Find(entity))
+func (d *Database) getDatabaseConnection(transaction *gorm.DB, tableName string) *gorm.DB {
+	if transaction != nil {
+		return transaction.Table(tableName).LogMode(d.logMode)
+	}
+
+	return d.Connection(tableName)
+}
+
+func (d *Database) Find(transaction *gorm.DB, condition, entity interface{}, tableName string) *response.Response {
+	connection := d.getDatabaseConnection(transaction, tableName)
+
+	return d.ParseGormQueryToDefaultResponse(connection.Where(condition).Find(entity))
 }
 func (d *Database) Create(transaction *gorm.DB, entity interface{}, tableName string) *response.Response {
 	connection := d.getDatabaseConnection(transaction, tableName)
@@ -68,12 +74,4 @@ func (d *Database) Delete(transaction *gorm.DB, condition, entity interface{}, t
 	connection := d.getDatabaseConnection(transaction, tableName)
 
 	return d.ParseGormQueryToDefaultResponse(connection.Where(condition).Delete(entity))
-}
-
-func (d *Database) getDatabaseConnection(transaction *gorm.DB, tableName string) *gorm.DB {
-	if transaction != nil {
-		return transaction.Table(tableName).LogMode(d.logMode)
-	}
-
-	return d.Connection(tableName)
 }

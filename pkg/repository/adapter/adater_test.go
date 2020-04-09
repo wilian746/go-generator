@@ -4,8 +4,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
-	defaultresponse "github.com/wilian746/gorm-crud-generator/pkg/repository/response"
 	"github.com/wilian746/gorm-crud-generator/pkg/repository/instance"
+	defaultresponse "github.com/wilian746/gorm-crud-generator/pkg/repository/response"
 	"testing"
 	"time"
 )
@@ -119,7 +119,7 @@ func TestDatabase_Create_Find(t *testing.T) {
 		product, connection := GetMemoryDatabase(false)
 		adapter := NewAdapter(connection)
 
-		response := adapter.Find(map[string]interface{}{}, &productList, product.tableName())
+		response := adapter.Find(nil, map[string]interface{}{}, &productList, product.tableName())
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(0))
 		assert.Len(t, productList, 0)
@@ -130,7 +130,7 @@ func TestDatabase_Create_Find(t *testing.T) {
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(1))
 
-		response = adapter.Find(map[string]interface{}{"id": 1}, &productList, product.tableName())
+		response = adapter.Find(nil, map[string]interface{}{"id": 1}, &productList, product.tableName())
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(1))
 		assert.Len(t, productList, 1)
@@ -141,7 +141,7 @@ func TestDatabase_Create_Find(t *testing.T) {
 		product, transaction := GetMemoryDatabase(true)
 		adapter := NewAdapter(transaction)
 
-		response := adapter.Find(map[string]interface{}{}, &productList, product.tableName())
+		response := adapter.Find(nil, map[string]interface{}{}, &productList, product.tableName())
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(0))
 		assert.Len(t, productList, 0)
@@ -152,7 +152,7 @@ func TestDatabase_Create_Find(t *testing.T) {
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(1))
 
-		response = adapter.Find(map[string]interface{}{}, &productList, product.tableName())
+		response = adapter.Find(nil, map[string]interface{}{}, &productList, product.tableName())
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(1))
 		assert.Len(t, productList, 1)
@@ -184,7 +184,7 @@ func TestDatabase_Update_Find(t *testing.T) {
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(1))
 
-		response = adapter.Find(map[string]interface{}{}, &productList, product.tableName())
+		response = adapter.Find(nil, map[string]interface{}{}, &productList, product.tableName())
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(1))
 		assert.Len(t, productList, 1)
@@ -212,7 +212,7 @@ func TestDatabase_Update_Find(t *testing.T) {
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(1))
 
-		response = adapter.Find(map[string]interface{}{}, &productList, product.tableName())
+		response = adapter.Find(nil, map[string]interface{}{}, &productList, product.tableName())
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(1))
 		assert.Len(t, productList, 1)
@@ -234,7 +234,7 @@ func TestDatabase_Delete_Find(t *testing.T) {
 		adapter := NewAdapter(connection)
 		_ = adapter.Create(nil, product, product.tableName())
 
-		response := adapter.Find(map[string]interface{}{}, &productList, product.tableName())
+		response := adapter.Find(nil, map[string]interface{}{}, &productList, product.tableName())
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(1))
 		assert.Len(t, productList, 1)
@@ -243,7 +243,7 @@ func TestDatabase_Delete_Find(t *testing.T) {
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(1))
 
-		response = adapter.Find(map[string]interface{}{}, &productList, product.tableName())
+		response = adapter.Find(nil, map[string]interface{}{}, &productList, product.tableName())
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(0))
 		assert.Len(t, productList, 0)
@@ -258,7 +258,7 @@ func TestDatabase_Delete_Find(t *testing.T) {
 		adapter := NewAdapter(transaction)
 		_ = adapter.Create(transaction, product, product.tableName())
 
-		response := adapter.Find(map[string]interface{}{}, &productList, product.tableName())
+		response := adapter.Find(nil, map[string]interface{}{}, &productList, product.tableName())
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(1))
 		assert.Len(t, productList, 1)
@@ -267,7 +267,7 @@ func TestDatabase_Delete_Find(t *testing.T) {
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(1))
 
-		response = adapter.Find(map[string]interface{}{}, &productList, product.tableName())
+		response = adapter.Find(nil, map[string]interface{}{}, &productList, product.tableName())
 		assert.NoError(t, response.Error())
 		assert.Equal(t, response.RowsAffected(), int64(0))
 		assert.Len(t, productList, 0)

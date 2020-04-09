@@ -6,3 +6,4 @@ fmt:
 lint:
 	golangci-lint run -v -c .golangci.yml ./...
 
+all: fmt lint
