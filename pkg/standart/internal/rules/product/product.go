@@ -7,20 +7,20 @@ import (
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
-	EntitiesRepository "github.com/wilian746/gorm-crud-generator/pkg/repository/entities"
+	entities2 "github.com/wilian746/gorm-crud-generator/pkg/repository/entities"
 	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/entities"
 	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/entities/product"
 	"io"
 	"time"
 )
 
-type ProductRules struct{}
+type Rules struct{}
 
-func NewRules() *ProductRules {
-	return &ProductRules{}
+func NewRules() *Rules {
+	return &Rules{}
 }
 
-func (p *ProductRules) ConvertIoReaderToStruct(data io.Reader) (body interface{}, err error) {
+func (p *Rules) ConvertIoReaderToStruct(data io.Reader) (body interface{}, err error) {
 	if data == nil {
 		return body, errors.New("body is invalid")
 	}
@@ -28,7 +28,7 @@ func (p *ProductRules) ConvertIoReaderToStruct(data io.Reader) (body interface{}
 	return body, err
 }
 
-func (p *ProductRules) GetMock() interface{} {
+func (p *Rules) GetMock() interface{} {
 	return product.Product{
 		Base: entities.Base{
 			ID:        uuid.New(),
@@ -39,7 +39,7 @@ func (p *ProductRules) GetMock() interface{} {
 	}
 }
 
-func (p *ProductRules) Migrate(connection *gorm.DB, toCreate bool, model EntitiesRepository.Interface) *gorm.DB {
+func (p *Rules) Migrate(connection *gorm.DB, toCreate bool, model entities2.Interface) *gorm.DB {
 	connection = connection.Table(model.TableName())
 	connection.AutoMigrate(model)
 	connection.New().Not(map[string]interface{}{"id": uuid.Nil}).Delete(model)
@@ -49,7 +49,7 @@ func (p *ProductRules) Migrate(connection *gorm.DB, toCreate bool, model Entitie
 	return connection
 }
 
-func (p *ProductRules) Validate(model interface{}) error {
+func (p *Rules) Validate(model interface{}) error {
 	productModel, err := product.InterfaceToModel(model)
 	if err != nil {
 		return err

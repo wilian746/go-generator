@@ -18,6 +18,10 @@ func (m *Mock) SetLogMode(logMode bool) Interface {
 	args := m.MethodCalled("SetLogMode")
 	return args.Get(0).(*Mock)
 }
+func (m *Mock) Health() bool {
+	args := m.MethodCalled("Health")
+	return args.Get(0).(bool)
+}
 func (m *Mock) Connection(tableName string) *gorm.DB {
 	args := m.MethodCalled("Connection")
 	return args.Get(0).(*gorm.DB)

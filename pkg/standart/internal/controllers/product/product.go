@@ -23,8 +23,8 @@ func NewController(repository adapter.Interface) Interface {
 	return &Controller{repository: repository}
 }
 
-func (c *Controller) ListOne(ID uuid.UUID) (entity product.Product, err error) {
-	response := c.repository.Find(map[string]interface{}{"id": ID}, &entity, entity.TableName())
+func (c *Controller) ListOne(id uuid.UUID) (entity product.Product, err error) {
+	response := c.repository.Find(nil, map[string]interface{}{"id": id}, &entity, entity.TableName())
 
 	if err := response.Error(); err != nil {
 		return entity, err
@@ -35,7 +35,7 @@ func (c *Controller) ListOne(ID uuid.UUID) (entity product.Product, err error) {
 
 func (c *Controller) ListAll() (entities []product.Product, err error) {
 	var entity product.Product
-	response := c.repository.Find(map[string]interface{}{}, &entities, entity.TableName())
+	response := c.repository.Find(nil, map[string]interface{}{}, &entities, entity.TableName())
 
 	if err := response.Error(); err != nil {
 		return entities, err
@@ -55,18 +55,18 @@ func (c *Controller) Create(entity *product.Product) (uuid.UUID, error) {
 	return entity.ID, nil
 }
 
-func (c *Controller) Update(ID uuid.UUID, entity *product.Product) error {
+func (c *Controller) Update(id uuid.UUID, entity *product.Product) error {
 	entity.UpdatedAt = time.Now()
 
-	response := c.repository.Update(nil, map[string]interface{}{"id": ID}, &entity, entity.TableName())
+	response := c.repository.Update(nil, map[string]interface{}{"id": id}, &entity, entity.TableName())
 
 	return response.Error()
 }
 
-func (c *Controller) Remove(ID uuid.UUID) error {
+func (c *Controller) Remove(id uuid.UUID) error {
 	var entity product.Product
 
-	response := c.repository.Delete(nil, map[string]interface{}{"id": ID}, &entity, entity.TableName())
+	response := c.repository.Delete(nil, map[string]interface{}{"id": id}, &entity, entity.TableName())
 
 	return response.Error()
 }

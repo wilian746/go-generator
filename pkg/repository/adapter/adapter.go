@@ -18,6 +18,7 @@ type Interface interface {
 
 	ParseGormQueryToDefaultResponse(result *gorm.DB) *response.Response
 
+	Health() bool
 	Find(transaction *gorm.DB, condition, entity interface{}, tableName string) *response.Response
 	Create(transaction *gorm.DB, entity interface{}, tableName string) *response.Response
 	Update(transaction *gorm.DB, condition, entity interface{}, tableName string) *response.Response
@@ -55,21 +56,28 @@ func (d *Database) getDatabaseConnection(transaction *gorm.DB, tableName string)
 	return d.Connection(tableName)
 }
 
+func (d *Database) Health() bool {
+	return d.connection.DB().Ping() == nil
+}
+
 func (d *Database) Find(transaction *gorm.DB, condition, entity interface{}, tableName string) *response.Response {
 	connection := d.getDatabaseConnection(transaction, tableName)
 
 	return d.ParseGormQueryToDefaultResponse(connection.Where(condition).Find(entity))
 }
+
 func (d *Database) Create(transaction *gorm.DB, entity interface{}, tableName string) *response.Response {
 	connection := d.getDatabaseConnection(transaction, tableName)
 
 	return d.ParseGormQueryToDefaultResponse(connection.Create(entity))
 }
+
 func (d *Database) Update(transaction *gorm.DB, condition, entity interface{}, tableName string) *response.Response {
 	connection := d.getDatabaseConnection(transaction, tableName)
 
 	return d.ParseGormQueryToDefaultResponse(connection.Where(condition).Updates(entity))
 }
+
 func (d *Database) Delete(transaction *gorm.DB, condition, entity interface{}, tableName string) *response.Response {
 	connection := d.getDatabaseConnection(transaction, tableName)
 

@@ -5,10 +5,12 @@ import (
 	"errors"
 	"github.com/go-chi/chi"
 	"github.com/google/uuid"
-	"github.com/wilian746/gorm-crud-generator/"
-	"github.com/wilian746/gorm-crud-generator/internal/controllers/product"
-	"github.com/wilian746/gorm-crud-generator/internal/handlers"
 	"github.com/wilian746/gorm-crud-generator/pkg/repository/adapter"
+	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/controllers/product"
+	EntityProduct "github.com/wilian746/gorm-crud-generator/pkg/standart/internal/entities/product"
+	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/handlers"
+	Rules "github.com/wilian746/gorm-crud-generator/pkg/standart/internal/rules"
+	RulesProduct "github.com/wilian746/gorm-crud-generator/pkg/standart/internal/rules/product"
 	"net/http"
 )
 
@@ -149,7 +151,6 @@ func (h *Handler) Options(w http.ResponseWriter, _ *http.Request) {
 }
 
 func (h *Handler) getBodyAndValidate(r *http.Request) (*EntityProduct.Product, error) {
-
 	body, err := h.Rules.ConvertIoReaderToStruct(r.Body)
 	if err != nil {
 		return &EntityProduct.Product{}, errors.New("body is required")

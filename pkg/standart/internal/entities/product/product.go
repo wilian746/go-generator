@@ -2,7 +2,7 @@ package product
 
 import (
 	"encoding/json"
-	"github.com/wilian746/gorm-crud-generator/internal/entities"
+	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/entities"
 )
 
 type Product struct {
