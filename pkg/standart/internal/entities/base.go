@@ -6,9 +6,9 @@ import (
 )
 
 type Base struct {
-	ID        uuid.UUID `gorm:"primary_key"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID        uuid.UUID `gorm:"primary_key" json:"id"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
 
 func (b *Base) GenerateID() {

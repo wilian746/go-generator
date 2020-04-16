@@ -7,7 +7,7 @@ import (
 )
 
 type Interface interface {
-	ConvertIoReaderToStruct(data io.Reader) (body interface{}, err error)
+	ConvertIoReaderToStruct(data io.Reader, model interface{}) (body interface{}, err error)
 	GetMock() interface{}
 	Migrate(connection *gorm.DB, toCreate bool, model entities.Interface) *gorm.DB
 	Validate(model interface{}) error

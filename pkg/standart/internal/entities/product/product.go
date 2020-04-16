@@ -7,7 +7,7 @@ import (
 
 type Product struct {
 	entities.Base
-	Name string
+	Name string `json:"name"`
 }
 
 func InterfaceToModel(data interface{}) (instance *Product, err error) {

@@ -7,7 +7,6 @@ import (
 	ServerConfig "github.com/wilian746/gorm-crud-generator/pkg/standart/config"
 	HealthHandler "github.com/wilian746/gorm-crud-generator/pkg/standart/internal/handlers/health"
 	ProductHandler "github.com/wilian746/gorm-crud-generator/pkg/standart/internal/handlers/product"
-	"net/http"
 )
 
 type Router struct {
@@ -24,10 +23,6 @@ func NewRouter() *Router {
 
 func (r *Router) SetRouters(repository adapter.Interface) *chi.Mux {
 	r.setConfigsRouters()
-
-	r.router.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		_, _ = w.Write([]byte("hi"))
-	})
 
 	r.RouterHealth(repository)
 	r.RouterProduct(repository)

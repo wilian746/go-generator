@@ -1,7 +1,6 @@
 package product
 
 import (
-	"encoding/json"
 	"errors"
 	"github.com/go-chi/chi"
 	"github.com/google/uuid"
@@ -11,6 +10,7 @@ import (
 	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/handlers"
 	Rules "github.com/wilian746/gorm-crud-generator/pkg/standart/internal/rules"
 	RulesProduct "github.com/wilian746/gorm-crud-generator/pkg/standart/internal/rules/product"
+	HttpStatus "github.com/wilian746/gorm-crud-generator/pkg/standart/utils/http"
 	"net/http"
 )
 
@@ -29,8 +29,6 @@ func NewHandler(repository adapter.Interface) handlers.Interface {
 }
 
 func (h *Handler) Get(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
 	if chi.URLParam(r, "ID") != "" {
 		h.getOne(w, r)
 	} else {
@@ -41,122 +39,92 @@ func (h *Handler) Get(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) getOne(w http.ResponseWriter, r *http.Request) {
 	ID, err := uuid.Parse(chi.URLParam(r, "ID"))
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		bytes, _ := json.Marshal(errors.New("ID is not uuid valid"))
-		_, _ = w.Write(bytes)
+		HttpStatus.StatusBadRequest(w, r, errors.New("ID is not uuid valid"))
 		return
 	}
 
 	response, err := h.Controller.ListOne(ID)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		bytes, _ := json.Marshal(err)
-		_, _ = w.Write(bytes)
+		HttpStatus.StatusInternalServerError(w, r, err)
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-	bytes, _ := json.Marshal(response)
-	_, _ = w.Write(bytes)
+	HttpStatus.StatusOK(w, r, response)
 }
 
-func (h *Handler) getAll(w http.ResponseWriter, _ *http.Request) {
+func (h *Handler) getAll(w http.ResponseWriter, r *http.Request) {
 	response, err := h.Controller.ListAll()
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		bytes, _ := json.Marshal(err)
-		_, _ = w.Write(bytes)
+		HttpStatus.StatusInternalServerError(w, r, err)
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-	bytes, _ := json.Marshal(response)
-	_, _ = w.Write(bytes)
+	HttpStatus.StatusOK(w, r, response)
 }
 
 func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 	productBody, err := h.getBodyAndValidate(r)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		bytes, _ := json.Marshal(err)
-		_, _ = w.Write(bytes)
+		HttpStatus.StatusBadRequest(w, r, errors.New("body is required"))
 		return
 	}
 
 	ID, err := h.Controller.Create(productBody)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		bytes, _ := json.Marshal(errors.New("error when update"))
-		_, _ = w.Write(bytes)
+		HttpStatus.StatusInternalServerError(w, r, errors.New("error when create"))
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-	bytes, _ := json.Marshal(ID)
-	_, _ = w.Write(bytes)
+	HttpStatus.StatusOK(w, r, map[string]interface{}{"id": ID.String()})
 }
 
 func (h *Handler) Put(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 	ID, err := uuid.Parse(chi.URLParam(r, "ID"))
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		bytes, _ := json.Marshal(errors.New("ID is not uuid valid"))
-		_, _ = w.Write(bytes)
+		HttpStatus.StatusBadRequest(w, r, errors.New("ID is not uuid valid"))
 		return
 	}
 
 	productBody, err := h.getBodyAndValidate(r)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		bytes, _ := json.Marshal(err)
-		_, _ = w.Write(bytes)
+		HttpStatus.StatusBadRequest(w, r, err)
 		return
 	}
 
 	if err := h.Controller.Update(ID, productBody); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		bytes, _ := json.Marshal(errors.New("error when update"))
-		_, _ = w.Write(bytes)
+		HttpStatus.StatusInternalServerError(w, r, errors.New("error when create"))
 		return
 	}
 
-	w.WriteHeader(http.StatusNoContent)
+	HttpStatus.StatusNoContent(w, r)
 }
 
 func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
 	ID, err := uuid.Parse(chi.URLParam(r, "ID"))
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		bytes, _ := json.Marshal(errors.New("ID is not uuid valid"))
-		_, _ = w.Write(bytes)
+		HttpStatus.StatusBadRequest(w, r, errors.New("ID is not uuid valid"))
 		return
 	}
 
 	if err := h.Controller.Remove(ID); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		bytes, _ := json.Marshal(err)
-		_, _ = w.Write(bytes)
+		HttpStatus.StatusInternalServerError(w, r, err)
 		return
 	}
 
-	w.WriteHeader(http.StatusNoContent)
+	HttpStatus.StatusNoContent(w, r)
 }
 
-func (h *Handler) Options(w http.ResponseWriter, _ *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusNoContent)
+func (h *Handler) Options(w http.ResponseWriter, r *http.Request) {
+	HttpStatus.StatusNoContent(w, r)
 }
 
-func (h *Handler) getBodyAndValidate(r *http.Request) (*EntityProduct.Product, error) {
-	body, err := h.Rules.ConvertIoReaderToStruct(r.Body)
+func (h *Handler) getBodyAndValidate(r *http.Request) (productBody *EntityProduct.Product, err error) {
+	body, err := h.Rules.ConvertIoReaderToStruct(r.Body, productBody)
 	if err != nil {
 		return &EntityProduct.Product{}, errors.New("body is required")
 	}
 
-	productBody, err := EntityProduct.InterfaceToModel(body)
+	productBody, err = EntityProduct.InterfaceToModel(body)
 	if err != nil {
 		return &EntityProduct.Product{}, errors.New("error on convert body to model")
 	}

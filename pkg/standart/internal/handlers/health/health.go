@@ -1,9 +1,10 @@
 package health
 
 import (
-	"encoding/json"
+	"errors"
 	"github.com/wilian746/gorm-crud-generator/pkg/repository/adapter"
 	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/handlers"
+	HttpStatus "github.com/wilian746/gorm-crud-generator/pkg/standart/utils/http"
 	"net/http"
 )
 
@@ -19,36 +20,26 @@ func NewHandler(repository adapter.Interface) handlers.Interface {
 }
 
 func (h *Handler) Get(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
 	if !h.Repository.Health() {
-		w.WriteHeader(http.StatusInternalServerError)
-		bytes, _ := json.Marshal("Relational database not alive")
-		_, _ = w.Write(bytes)
+		HttpStatus.StatusInternalServerError(w, r, errors.New("Relational database not alive"))
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-	bytes, _ := json.Marshal("Service OK")
-	_, _ = w.Write(bytes)
+	HttpStatus.StatusOK(w, r, "Service OK")
 }
 
 func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusMethodNotAllowed)
+	HttpStatus.StatusMethodNotAllowed(w, r)
 }
 
 func (h *Handler) Put(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusMethodNotAllowed)
+	HttpStatus.StatusMethodNotAllowed(w, r)
 }
 
 func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusMethodNotAllowed)
+	HttpStatus.StatusMethodNotAllowed(w, r)
 }
 
-func (h *Handler) Options(w http.ResponseWriter, _ *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusNoContent)
+func (h *Handler) Options(w http.ResponseWriter, r *http.Request) {
+	HttpStatus.StatusNoContent(w, r)
 }

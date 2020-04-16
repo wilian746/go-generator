@@ -20,12 +20,11 @@ func NewRules() *Rules {
 	return &Rules{}
 }
 
-func (p *Rules) ConvertIoReaderToStruct(data io.Reader) (body interface{}, err error) {
+func (p *Rules) ConvertIoReaderToStruct(data io.Reader, model interface{}) (interface{}, error) {
 	if data == nil {
-		return body, errors.New("body is invalid")
+		return nil, errors.New("body is invalid")
 	}
-	err = json.NewDecoder(data).Decode(&body)
-	return body, err
+	return model, json.NewDecoder(data).Decode(model)
 }
 
 func (p *Rules) GetMock() interface{} {
