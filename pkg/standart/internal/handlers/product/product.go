@@ -6,9 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/wilian746/gorm-crud-generator/pkg/repository/adapter"
 	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/controllers/product"
-	EntityProduct "github.com/wilian746/gorm-crud-generator/pkg/standart/internal/entities/product"
 	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/handlers"
-	Rules "github.com/wilian746/gorm-crud-generator/pkg/standart/internal/rules"
 	RulesProduct "github.com/wilian746/gorm-crud-generator/pkg/standart/internal/rules/product"
 	HttpStatus "github.com/wilian746/gorm-crud-generator/pkg/standart/utils/http"
 	"net/http"
@@ -18,7 +16,7 @@ type Handler struct {
 	handlers.Interface
 
 	Controller product.Interface
-	Rules      Rules.Interface
+	Rules      *RulesProduct.Rules
 }
 
 func NewHandler(repository adapter.Interface) handlers.Interface {
@@ -45,6 +43,10 @@ func (h *Handler) getOne(w http.ResponseWriter, r *http.Request) {
 
 	response, err := h.Controller.ListOne(ID)
 	if err != nil {
+		if err.Error() == "record not found" {
+			HttpStatus.StatusNotfound(w, r, err)
+			return
+		}
 		HttpStatus.StatusInternalServerError(w, r, err)
 		return
 	}
@@ -63,7 +65,7 @@ func (h *Handler) getAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
-	productBody, err := h.getBodyAndValidate(r)
+	productBody, err := h.Rules.ConvertIoReaderToProduct(r.Body)
 	if err != nil {
 		HttpStatus.StatusBadRequest(w, r, errors.New("body is required"))
 		return
@@ -85,7 +87,7 @@ func (h *Handler) Put(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	productBody, err := h.getBodyAndValidate(r)
+	productBody, err := h.Rules.ConvertIoReaderToProduct(r.Body)
 	if err != nil {
 		HttpStatus.StatusBadRequest(w, r, err)
 		return
@@ -118,16 +120,3 @@ func (h *Handler) Options(w http.ResponseWriter, r *http.Request) {
 	HttpStatus.StatusNoContent(w, r)
 }
 
-func (h *Handler) getBodyAndValidate(r *http.Request) (productBody *EntityProduct.Product, err error) {
-	body, err := h.Rules.ConvertIoReaderToStruct(r.Body, productBody)
-	if err != nil {
-		return &EntityProduct.Product{}, errors.New("body is required")
-	}
-
-	productBody, err = EntityProduct.InterfaceToModel(body)
-	if err != nil {
-		return &EntityProduct.Product{}, errors.New("error on convert body to model")
-	}
-
-	return productBody, h.Rules.Validate(productBody)
-}
