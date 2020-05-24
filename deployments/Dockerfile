@@ -2,7 +2,7 @@ FROM golang:1.14.2 as builder
 RUN mkdir /build
 ADD . /build/
 WORKDIR /build
-RUN CGO_ENABLED=0 GOOS=linux go build -o go-generator cmd/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o go-generator cmd/go-generator/main.go
 
 FROM alpine:3
 COPY --from=builder /build/go-generator /bin/
