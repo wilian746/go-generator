@@ -2,8 +2,8 @@ package health
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/wilian746/gorm-crud-generator/pkg/standart-gorm/repository/adapter"
-	"github.com/wilian746/gorm-crud-generator/pkg/standart-gorm/repository/database"
+	"github.com/wilian746/go-generator/pkg/standart-gorm/repository/adapter"
+	"github.com/wilian746/go-generator/pkg/standart-gorm/repository/database"
 	"net/http"
 	"net/http/httptest"
 	"testing"

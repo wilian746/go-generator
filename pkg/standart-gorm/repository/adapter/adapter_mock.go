@@ -3,7 +3,7 @@ package adapter
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/mock"
-	defaultresponse "github.com/wilian746/gorm-crud-generator/pkg/standart-gorm/repository/response"
+	defaultresponse "github.com/wilian746/go-generator/pkg/standart-gorm/repository/response"
 )
 
 type Mock struct {

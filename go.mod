@@ -1,4 +1,4 @@
-module github.com/wilian746/gorm-crud-generator
+module github.com/wilian746/go-generator
 
 go 1.13
 

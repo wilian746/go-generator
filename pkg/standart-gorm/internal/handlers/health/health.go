@@ -2,9 +2,9 @@ package health
 
 import (
 	"errors"
-	"github.com/wilian746/gorm-crud-generator/pkg/standart-gorm/internal/handlers"
-	"github.com/wilian746/gorm-crud-generator/pkg/standart-gorm/repository/adapter"
-	HttpStatus "github.com/wilian746/gorm-crud-generator/pkg/standart-gorm/utils/http"
+	"github.com/wilian746/go-generator/pkg/standart-gorm/internal/handlers"
+	"github.com/wilian746/go-generator/pkg/standart-gorm/repository/adapter"
+	HttpStatus "github.com/wilian746/go-generator/pkg/standart-gorm/utils/http"
 	"net/http"
 )
 

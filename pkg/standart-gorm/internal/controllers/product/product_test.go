@@ -3,10 +3,10 @@ package product
 import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	EntitiesProduct "github.com/wilian746/gorm-crud-generator/pkg/standart-gorm/internal/entities/product"
-	RulesProduct "github.com/wilian746/gorm-crud-generator/pkg/standart-gorm/internal/rules/product"
-	"github.com/wilian746/gorm-crud-generator/pkg/standart-gorm/repository/adapter"
-	"github.com/wilian746/gorm-crud-generator/pkg/standart-gorm/repository/database"
+	EntitiesProduct "github.com/wilian746/go-generator/pkg/standart-gorm/internal/entities/product"
+	RulesProduct "github.com/wilian746/go-generator/pkg/standart-gorm/internal/rules/product"
+	"github.com/wilian746/go-generator/pkg/standart-gorm/repository/adapter"
+	"github.com/wilian746/go-generator/pkg/standart-gorm/repository/database"
 	"testing"
 )
 

@@ -2,10 +2,10 @@ package cmdinit
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/wilian746/gorm-crud-generator/internal/commands/generate/server"
-	"github.com/wilian746/gorm-crud-generator/internal/enums/database"
-	"github.com/wilian746/gorm-crud-generator/internal/enums/errors"
-	"github.com/wilian746/gorm-crud-generator/internal/utils/prompt"
+	"github.com/wilian746/go-generator/internal/commands/generate/server"
+	"github.com/wilian746/go-generator/internal/enums/database"
+	"github.com/wilian746/go-generator/internal/enums/errors"
+	"github.com/wilian746/go-generator/internal/utils/prompt"
 	"os"
 	"strings"
 )
@@ -85,7 +85,7 @@ func (c *Command) factoryDatabase(args []string) error {
 func (c *Command) gormInit(value string) error {
 	switch value {
 	case Server:
-		return c.initServer()
+		return c.initServer(database.Gorm)
 	default:
 		return errors.ErrInitTypeInvalid
 	}
@@ -102,7 +102,7 @@ func (c *Command) Init() {
 	}
 }
 
-func (c *Command) initServer() error {
+func (c *Command) initServer(db database.Database) error {
 	actualDirectory, err := os.Getwd()
 	if err != nil {
 		return err
@@ -119,5 +119,5 @@ func (c *Command) initServer() error {
 	if err != nil || moduleName == "" {
 		return errors.ErrModuleNameInvalid
 	}
-	return server.NewServer().CreateFoldersAndFiles(pathDestiny, moduleName)
+	return server.NewServer().CreateFoldersAndFiles(pathDestiny, moduleName, db)
 }

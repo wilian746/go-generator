@@ -1,6 +1,6 @@
 package config
 
-import "github.com/wilian746/gorm-crud-generator/pkg/standart-gorm/utils/environment"
+import "github.com/wilian746/go-generator/pkg/standart-gorm/utils/environment"
 
 type Config struct {
 	Port        int

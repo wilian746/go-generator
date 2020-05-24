@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/wilian746/gorm-crud-generator/internal/commands/cmd_init"
+	"github.com/wilian746/go-generator/internal/commands/cmd_init"
 	"os"
 )
 

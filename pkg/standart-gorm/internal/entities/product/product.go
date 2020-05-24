@@ -3,7 +3,7 @@ package product
 import (
 	"encoding/json"
 	"github.com/google/uuid"
-	"github.com/wilian746/gorm-crud-generator/pkg/standart-gorm/internal/entities"
+	"github.com/wilian746/go-generator/pkg/standart-gorm/internal/entities"
 	"time"
 )
 
