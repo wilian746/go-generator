@@ -28,7 +28,7 @@ func (s *Server) CreateFoldersAndFiles(pathDestiny, moduleName string, db databa
 	if err := s.factoryCopyContent(pathDestiny, moduleName, db); err != nil {
 		return err
 	}
-	return nil
+	return s.copyDefaultFiles(pathDestiny, moduleName)
 }
 
 func (s *Server) factoryCopyContent(destiny, moduleName string, db database.Database) error {
@@ -89,4 +89,31 @@ func (s *Server) replaceImportsToModuleName(fileContent []byte, moduleName strin
 	fileContentReplaced := strings.ReplaceAll(string(fileContent), importModule, moduleName)
 
 	return []byte(fileContentReplaced)
+}
+
+func (s *Server) replaceModuleToModuleName(fileContent []byte, moduleName string) []byte {
+	importModule := "github.com/wilian746/go-generator"
+
+	fileContentReplaced := strings.ReplaceAll(string(fileContent), importModule, moduleName)
+
+	return []byte(fileContentReplaced)
+}
+
+func (s *Server) copyDefaultFiles(pathDestiny, moduleName string) error {
+	for _, dir := range files.ValuesNoGO() {
+		absPathFileToCreate := fmt.Sprintf("%s/%s", pathDestiny, dir)
+		absPath, _ := filepath.Abs(string(dir))
+		fileContent, err := s.readContent(absPath)
+		if err != nil {
+			return err
+		}
+		if dir == files.GoMod {
+			fileContent = s.replaceModuleToModuleName(fileContent, moduleName)
+		}
+		err = s.writeContent(absPathFileToCreate, fileContent)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

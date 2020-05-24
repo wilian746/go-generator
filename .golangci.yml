@@ -79,6 +79,13 @@ linters:
     - varcheck
     - whitespace
 
+run:
+  skip-dirs:
+    - vendor/
+  skip-files:
+    - .*_test.go
+    - .*_mock.go
+
 service:
   golangci-lint-version: 1.23.x
   prepare:
