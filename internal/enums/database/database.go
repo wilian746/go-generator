@@ -3,7 +3,7 @@ package database
 type Database string
 
 const (
-	Gorm = "gorm"
+	Gorm    = "gorm"
 	Unknown = "unknown"
 )
 

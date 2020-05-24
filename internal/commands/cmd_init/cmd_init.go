@@ -93,12 +93,12 @@ func (c *Command) gormInit(value string) error {
 
 func (c *Command) Init() {
 	c.cmd = &cobra.Command{
-		Use:       "init",
-		Short:     "Initialize gorm standart-gorm",
-		Long:      "Get base of project, api, controller using gorm-crud standart-gorm",
-		Example:   "go-generator init gorm server",
-		Args:      cobra.ExactValidArgs(2),
-		RunE:      c.Execute,
+		Use:     "init",
+		Short:   "Initialize gorm standart-gorm",
+		Long:    "Get base of project, api, controller using gorm-crud standart-gorm",
+		Example: "go-generator init gorm server",
+		Args:    cobra.ExactValidArgs(2),
+		RunE:    c.Execute,
 	}
 }
 

@@ -1,6 +1,7 @@
 package files
 
 type Files string
+type NoGo string
 
 const (
 	CmdMain                               Files = "cmd/main.go"
@@ -31,15 +32,14 @@ const (
 	RepositoryResponseResponseTest        Files = "repository/response/response_test.go"
 	UtilsEnvironmentEnvironment           Files = "utils/environment/environment.go"
 	UtilsEnvironmentEnvironmentTest       Files = "utils/environment/environment_test.go"
-	UtilsHTTPHTTP                         Files = "utils/http/http.go"
-	UtilsHTTPHTTPTest                     Files = "utils/http/http_test.go"
+	UtilsHTTPResponse                     Files = "utils/http/response.go"
 	UtilsLoggerLogger                     Files = "utils/logger/logger.go"
 	UtilsLoggerLoggerTest                 Files = "utils/logger/logger_test.go"
-	GitIgnore                             Files = ".gitignore"
-	GolangCi                              Files = ".golangci.yml"
-	MakeFile                              Files = "MakeFile"
-	GoMod                                 Files = "go.mod"
-	GoSum                                 Files = "go.sum"
+	GitIgnore                             NoGo  = ".gitignore"
+	GolangCi                              NoGo  = ".golangci.yml"
+	Makefile                              NoGo  = "Makefile"
+	GoMod                                 NoGo  = "go.mod"
+	GoSum                                 NoGo  = "go.sum"
 )
 
 func Values() []Files {
@@ -72,13 +72,17 @@ func Values() []Files {
 		RepositoryResponseResponseTest,
 		UtilsEnvironmentEnvironment,
 		UtilsEnvironmentEnvironmentTest,
-		UtilsHTTPHTTP,
-		UtilsHTTPHTTPTest,
+		UtilsHTTPResponse,
 		UtilsLoggerLogger,
 		UtilsLoggerLoggerTest,
+	}
+}
+
+func ValuesNoGO() []NoGo {
+	return []NoGo{
 		GitIgnore,
 		GolangCi,
-		MakeFile,
+		Makefile,
 		GoMod,
 		GoSum,
 	}

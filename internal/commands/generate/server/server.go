@@ -5,7 +5,10 @@ import (
 	"github.com/wilian746/go-generator/internal/enums/database"
 	"github.com/wilian746/go-generator/internal/enums/files"
 	"github.com/wilian746/go-generator/internal/enums/folders"
+	"io/ioutil"
 	"os"
+	"path/filepath"
+	"strings"
 )
 
 type Interface interface {
@@ -22,13 +25,19 @@ func (s *Server) CreateFoldersAndFiles(pathDestiny, moduleName string, db databa
 	if err := s.createFolders(pathDestiny); err != nil {
 		return err
 	}
-	if err := s.createFiles(pathDestiny); err != nil {
-		return err
-	}
-	if err := s.factoryCopyContent(pathDestiny, db); err != nil {
+	if err := s.factoryCopyContent(pathDestiny, moduleName, db); err != nil {
 		return err
 	}
 	return nil
+}
+
+func (s *Server) factoryCopyContent(destiny, moduleName string, db database.Database) error {
+	switch db {
+	case database.Gorm:
+		return s.createFiles(destiny, moduleName, "standart-gorm")
+	default:
+		return nil
+	}
 }
 
 func (s *Server) createFolders(pathDestiny string) error {
@@ -41,28 +50,43 @@ func (s *Server) createFolders(pathDestiny string) error {
 	return nil
 }
 
-func (s *Server) createFiles(pathDestiny string) error {
+func (s *Server) createFiles(pathDestiny, moduleName, databaseFolderName string) error {
 	for _, dir := range files.Values() {
-		file, err := os.Create(fmt.Sprintf("%s/%s", pathDestiny, dir))
+		absPathFileToCreate := fmt.Sprintf("%s/%s", pathDestiny, dir)
+		absPath, _ := filepath.Abs(fmt.Sprintf("pkg/%s/%s", databaseFolderName, dir))
+		fileContent, err := s.readContent(absPath)
 		if err != nil {
 			return err
 		}
-		if err := file.Close(); err != nil {
+		fileContent = s.replaceImportsToModuleName(fileContent, moduleName)
+		err = s.writeContent(absPathFileToCreate, fileContent)
+		if err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func (s *Server) factoryCopyContent(destiny string, db database.Database) error {
-	switch db {
-	case database.Gorm:
-		return s.copyContent(destiny, "standart-gorm")
-	default:
-		return nil
+func (s *Server) readContent(absPath string) ([]byte, error) {
+	actualFile, err := ioutil.ReadFile(absPath)
+	if err != nil {
+		return []byte{}, err
 	}
+	return actualFile, nil
 }
 
-func (s *Server) copyContent(destiny string, databaseFolderName string) error {
+func (s *Server) writeContent(absPathFileToCreate string, fileContent []byte) error {
+	err := ioutil.WriteFile(absPathFileToCreate, fileContent, os.ModePerm)
+	if err != nil {
+		return err
+	}
 	return nil
+}
+
+func (s *Server) replaceImportsToModuleName(fileContent []byte, moduleName string) []byte {
+	importModule := "github.com/wilian746/go-generator/pkg/standart-gorm"
+
+	fileContentReplaced := strings.ReplaceAll(string(fileContent), importModule, moduleName)
+
+	return []byte(fileContentReplaced)
 }
