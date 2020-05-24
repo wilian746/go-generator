@@ -8,9 +8,9 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "gorm-crud",
-	Short: "Gorm CRUD Generator",
-	Long:  "Gorm CRUD Generator is an command line interface to create your API using relational database more facility",
+	Use:   "go-generator",
+	Short: "GO Generator",
+	Long:  "GO Generator is an command line interface to create your API using some databases more facility",
 }
 
 // nolint
