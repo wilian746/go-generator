@@ -5,8 +5,8 @@ type NoGo string
 
 const (
 	CmdMain                                 Files = "cmd/main.go"
-	ConfigConfig                            Files = "configs/configs.go"
-	ConfigConfigTest                        Files = "configs/config_test.go"
+	ConfigsConfigs                          Files = "configs/configs.go"
+	ConfigsConfigsTest                      Files = "configs/configs_test.go"
 	InternalControllersProductProduct       Files = "internal/controllers/product/product.go"
 	InternalControllersProductProductTest   Files = "internal/controllers/product/product_test.go"
 	InternalEntitiesBase                    Files = "internal/entities/base.go"
@@ -16,7 +16,7 @@ const (
 	InternalHandlersProductProductTest      Files = "internal/handlers/product/product_test.go"
 	InternalHandlersHealthHealth            Files = "internal/handlers/health/health.go"
 	InternalHandlersHealthHealthTest        Files = "internal/handlers/health/health_test.go"
-	InternalRoutesConfig                    Files = "internal/routes/configs.go"
+	InternalRoutesConfig                    Files = "internal/routes/config.go"
 	InternalRoutesConfigTest                Files = "internal/routes/config_test.go"
 	InternalRoutesRoutes                    Files = "internal/routes/routes.go"
 	InternalRoutesRoutesTest                Files = "internal/routes/routes_test.go"
@@ -45,8 +45,8 @@ const (
 func Values() []Files {
 	return []Files{
 		CmdMain,
-		ConfigConfig,
-		ConfigConfigTest,
+		ConfigsConfigs,
+		ConfigsConfigsTest,
 		InternalControllersProductProduct,
 		InternalControllersProductProductTest,
 		InternalEntitiesBase,

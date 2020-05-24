@@ -4,7 +4,7 @@ type Folders string
 
 const (
 	Cmd                        Folders = "cmd"
-	Config                     Folders = "configs"
+	Configs                    Folders = "configs"
 	Internal                   Folders = "internal"
 	InternalControllers        Folders = "internal/controllers"
 	InternalControllersProduct Folders = "internal/controllers/product"
@@ -31,7 +31,7 @@ const (
 func Values() []Folders {
 	return []Folders{
 		Cmd,
-		Config,
+		Configs,
 		Internal,
 		InternalControllers,
 		InternalControllersProduct,
