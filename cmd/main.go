@@ -13,6 +13,7 @@ var rootCmd = &cobra.Command{
 	Long:  "Gorm CRUD Generator is an command line interface to create your API using relational database more facility",
 }
 
+// nolint
 func init() {
 	rootCmd.AddCommand(cmdinit.NewInitCommand().Cmd())
 }

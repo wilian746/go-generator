@@ -1,11 +1,11 @@
-package getenv
+package environment
 
 import (
 	"os"
 	"strconv"
 )
 
-func GetEnv(envName string, defaultValue string) string {
+func GetEnvString(envName, defaultValue string) string {
 	environment := os.Getenv(envName)
 	if environment == "" {
 		return defaultValue
@@ -13,7 +13,7 @@ func GetEnv(envName string, defaultValue string) string {
 	return environment
 }
 
-func GetEnvInt(envName string, defaultValue int) int {
+func GetEnvAndParseToInt(envName string, defaultValue int) int {
 	environment := os.Getenv(envName)
 	if environment == "" {
 		return defaultValue

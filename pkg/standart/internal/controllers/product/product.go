@@ -60,7 +60,7 @@ func (c *Controller) Update(id uuid.UUID, entity *product.Product) error {
 
 	response := c.repository.Update(nil, map[string]interface{}{"id": id}, &entity, entity.TableName())
 	if response.Error() == nil && response.RowsAffected() == 0 {
-		return adapter.RecordNotFound
+		return adapter.ErrRecordNotFound
 	}
 	return response.Error()
 }
@@ -70,7 +70,7 @@ func (c *Controller) Remove(id uuid.UUID) error {
 
 	response := c.repository.Delete(nil, map[string]interface{}{"id": id}, &entity, entity.TableName())
 	if response.Error() == nil && response.RowsAffected() == 0 {
-		return adapter.RecordNotFound
+		return adapter.ErrRecordNotFound
 	}
 	return response.Error()
 }

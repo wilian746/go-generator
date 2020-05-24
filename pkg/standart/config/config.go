@@ -1,19 +1,19 @@
 package config
 
-import "github.com/wilian746/gorm-crud-generator/pkg/standart/utils/get_env"
+import "github.com/wilian746/gorm-crud-generator/pkg/standart/utils/environment"
 
 type Config struct {
-	Port int
-	Timeout int
-	Dialect string
+	Port        int
+	Timeout     int
+	Dialect     string
 	DatabaseURI string
 }
 
 func GetConfig() Config {
 	return Config{
-		Port:        getenv.GetEnvInt("PORT", 8666),
-		Timeout:     getenv.GetEnvInt("TIMEOUT", 30),
-		Dialect:     getenv.GetEnv("DATABASE_DIALECT", "sqlite3"),
-		DatabaseURI: getenv.GetEnv("DATABASE_URI", ":memory:"),
+		Port:        environment.GetEnvAndParseToInt("PORT", 8666),
+		Timeout:     environment.GetEnvAndParseToInt("TIMEOUT", 30),
+		Dialect:     environment.GetEnvString("DATABASE_DIALECT", "sqlite3"),
+		DatabaseURI: environment.GetEnvString("DATABASE_URI", ":memory:"),
 	}
 }

@@ -23,7 +23,7 @@ func (resp *response) bytes() []byte {
 	return data
 }
 
-func (resp *response) sendResponse(w http.ResponseWriter, r *http.Request) {
+func (resp *response) sendResponse(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(resp.Status)

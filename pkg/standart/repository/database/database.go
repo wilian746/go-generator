@@ -3,10 +3,10 @@ package database
 import (
 	"errors"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mssql"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	_ "github.com/jinzhu/gorm/dialects/mssql"    // gorm dialect
+	_ "github.com/jinzhu/gorm/dialects/mysql"    // gorm dialect
+	_ "github.com/jinzhu/gorm/dialects/postgres" // gorm dialect
+	_ "github.com/jinzhu/gorm/dialects/sqlite"   // gorm dialect
 	"log"
 )
 

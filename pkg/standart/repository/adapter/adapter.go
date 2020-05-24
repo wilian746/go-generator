@@ -6,7 +6,7 @@ import (
 	"github.com/wilian746/gorm-crud-generator/pkg/standart/repository/response"
 )
 
-var RecordNotFound = errors.New("record not found")
+var ErrRecordNotFound = errors.New("record not found")
 
 type Database struct {
 	connection *gorm.DB

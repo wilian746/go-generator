@@ -15,7 +15,7 @@ func NewPrompt() Interface {
 
 func (p *Prompt) Ask(label, defaultValue string) (string, error) {
 	cmd := promptui.Prompt{
-		Label: label,
+		Label:   label,
 		Default: defaultValue,
 	}
 	return cmd.Run()

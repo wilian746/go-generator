@@ -81,14 +81,14 @@ func TestController_ListOne(t *testing.T) {
 		rules.Migrate(conn, productMock)
 		_, err := controller.ListOne(uuid.New())
 		assert.Error(t, err)
-		assert.Equal(t, err, adapter.RecordNotFound)
+		assert.Equal(t, err, adapter.ErrRecordNotFound)
 	})
 	t.Run("Should return error product on database because not migrate", func(t *testing.T) {
 		conn := database.GetConnection("sqlite3", ":memory:")
 		controller := NewController(adapter.NewAdapter(conn))
 		_, err := controller.ListOne(uuid.New())
 		assert.Error(t, err)
-		assert.NotEqual(t, err, adapter.RecordNotFound)
+		assert.NotEqual(t, err, adapter.ErrRecordNotFound)
 	})
 	t.Run("Should not return empty product on database", func(t *testing.T) {
 		conn := database.GetConnection("sqlite3", ":memory:")
@@ -117,7 +117,7 @@ func TestController_Update(t *testing.T) {
 		assert.Error(t, err)
 		err = controller.Update(ID, productMock)
 		assert.Error(t, err)
-		assert.Equal(t, err, adapter.RecordNotFound)
+		assert.Equal(t, err, adapter.ErrRecordNotFound)
 	})
 	t.Run("Should return error product on database because not migrate when update", func(t *testing.T) {
 		conn := database.GetConnection("sqlite3", ":memory:")
@@ -126,7 +126,7 @@ func TestController_Update(t *testing.T) {
 		productMock := rules.GetMock()
 		err := controller.Update(uuid.New(), productMock)
 		assert.Error(t, err)
-		assert.NotEqual(t, err, adapter.RecordNotFound)
+		assert.NotEqual(t, err, adapter.ErrRecordNotFound)
 	})
 	t.Run("Should udpdate product without error and check if names is different", func(t *testing.T) {
 		conn := database.GetConnection("sqlite3", ":memory:")
@@ -162,14 +162,14 @@ func TestController_Delete(t *testing.T) {
 		assert.Error(t, err)
 		err = controller.Remove(ID)
 		assert.Error(t, err)
-		assert.Equal(t, err, adapter.RecordNotFound)
+		assert.Equal(t, err, adapter.ErrRecordNotFound)
 	})
 	t.Run("Should return error product on database because not migrate when delete", func(t *testing.T) {
 		conn := database.GetConnection("sqlite3", ":memory:")
 		controller := NewController(adapter.NewAdapter(conn))
 		err := controller.Remove(uuid.New())
 		assert.Error(t, err)
-		assert.NotEqual(t, err, adapter.RecordNotFound)
+		assert.NotEqual(t, err, adapter.ErrRecordNotFound)
 	})
 	t.Run("Should delete product without error and check if product not exists", func(t *testing.T) {
 		conn := database.GetConnection("sqlite3", ":memory:")
@@ -187,6 +187,6 @@ func TestController_Delete(t *testing.T) {
 		assert.NoError(t, err)
 		_, err = controller.ListOne(founded.ID)
 		assert.Error(t, err)
-		assert.Equal(t, err, adapter.RecordNotFound)
+		assert.Equal(t, err, adapter.ErrRecordNotFound)
 	})
 }

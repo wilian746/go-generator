@@ -2,6 +2,7 @@ package cmdinit
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/wilian746/gorm-crud-generator/internal/commands/generate/server"
 	"github.com/wilian746/gorm-crud-generator/internal/enums/errors"
 	"github.com/wilian746/gorm-crud-generator/internal/utils/prompt"
 	"os"
@@ -14,8 +15,7 @@ type Interface interface {
 }
 
 type Command struct {
-	isForced       bool
-	cmd            *cobra.Command
+	cmd    *cobra.Command
 	prompt prompt.Interface
 }
 
@@ -36,8 +36,7 @@ func (c *Command) Execute(cmd *cobra.Command, args []string) error {
 		return errors.ErrInitTypeEmpty
 	}
 
-	switch args[0] {
-	case "server":
+	if args[0] == "server" {
 		return c.initServer()
 	}
 	return errors.ErrInitTypeInvalid
@@ -45,13 +44,13 @@ func (c *Command) Execute(cmd *cobra.Command, args []string) error {
 
 func (c *Command) Init() {
 	c.cmd = &cobra.Command{
-		Use:     "init",
-		Short:   "Initialize gorm standart",
-		Long:    "Get base of project, api, controller using gorm-crud standart",
-		Example: "gorm-crud init server",
+		Use:       "init",
+		Short:     "Initialize gorm standart",
+		Long:      "Get base of project, api, controller using gorm-crud standart",
+		Example:   "gorm-crud init server",
 		ValidArgs: []string{"server"},
 		Args:      cobra.ExactValidArgs(1),
-		RunE:    c.Execute,
+		RunE:      c.Execute,
 	}
 }
 
@@ -68,10 +67,5 @@ func (c *Command) initServer() error {
 	if err != nil || moduleName == "" {
 		return errors.ErrModuleNameInvalid
 	}
-	return c.createServer(pathDestiny)
-}
-
-func (c *Command) createServer(destiny string) error {
-	// Create all structure server
-	return nil
+	return server.NewServer().CreateFoldersAndFiles(pathDestiny, moduleName)
 }

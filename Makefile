@@ -6,4 +6,7 @@ fmt:
 lint:
 	golangci-lint run -v -c .golangci.yml ./...
 
-all: fmt lint
+test:
+	go test ./... -timeout=2m -parallel=4
+
+all: fmt lint test

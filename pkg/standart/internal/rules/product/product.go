@@ -49,9 +49,9 @@ func (p *Rules) Migrate(connection *gorm.DB, model RepositoryEntity.Interface) *
 	return connection
 }
 
-func (p *Rules) Validate(product *product.Product) error {
-	return Validation.ValidateStruct(product,
-		Validation.Field(&product.ID, Validation.Required, is.UUIDv4),
-		Validation.Field(&product.Name, Validation.Required, Validation.Length(3, 50)),
+func (p *Rules) Validate(productEntity *product.Product) error {
+	return Validation.ValidateStruct(productEntity,
+		Validation.Field(&productEntity.ID, Validation.Required, is.UUIDv4),
+		Validation.Field(&productEntity.Name, Validation.Required, Validation.Length(3, 50)),
 	)
 }

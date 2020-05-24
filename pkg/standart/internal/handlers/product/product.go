@@ -43,7 +43,7 @@ func (h *Handler) getOne(w http.ResponseWriter, r *http.Request) {
 
 	response, err := h.Controller.ListOne(ID)
 	if err != nil {
-		if err.Error() == adapter.RecordNotFound.Error() {
+		if err.Error() == adapter.ErrRecordNotFound.Error() {
 			HttpStatus.StatusNotfound(w, r, err)
 			return
 		}
@@ -93,7 +93,7 @@ func (h *Handler) Put(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.Controller.Update(ID, productBody); err != nil {
-		if err.Error() == adapter.RecordNotFound.Error() {
+		if err.Error() == adapter.ErrRecordNotFound.Error() {
 			HttpStatus.StatusNotfound(w, r, err)
 			return
 		}
@@ -112,7 +112,7 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.Controller.Remove(ID); err != nil {
-		if err.Error() == adapter.RecordNotFound.Error() {
+		if err.Error() == adapter.ErrRecordNotFound.Error() {
 			HttpStatus.StatusNotfound(w, r, err)
 			return
 		}
@@ -126,4 +126,3 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) Options(w http.ResponseWriter, r *http.Request) {
 	HttpStatus.StatusNoContent(w, r)
 }
-
