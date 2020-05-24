@@ -4,10 +4,10 @@ import (
 	"errors"
 	"github.com/go-chi/chi"
 	"github.com/google/uuid"
-	"github.com/wilian746/gorm-crud-generator/pkg/repository/adapter"
 	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/controllers/product"
 	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/handlers"
 	RulesProduct "github.com/wilian746/gorm-crud-generator/pkg/standart/internal/rules/product"
+	"github.com/wilian746/gorm-crud-generator/pkg/standart/repository/adapter"
 	HttpStatus "github.com/wilian746/gorm-crud-generator/pkg/standart/utils/http"
 	"net/http"
 )
@@ -43,7 +43,7 @@ func (h *Handler) getOne(w http.ResponseWriter, r *http.Request) {
 
 	response, err := h.Controller.ListOne(ID)
 	if err != nil {
-		if err.Error() == "record not found" {
+		if err.Error() == adapter.RecordNotFound.Error() {
 			HttpStatus.StatusNotfound(w, r, err)
 			return
 		}
@@ -70,7 +70,6 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
 		HttpStatus.StatusBadRequest(w, r, errors.New("body is required"))
 		return
 	}
-
 	ID, err := h.Controller.Create(productBody)
 	if err != nil {
 		HttpStatus.StatusInternalServerError(w, r, errors.New("error when create"))
@@ -94,6 +93,10 @@ func (h *Handler) Put(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.Controller.Update(ID, productBody); err != nil {
+		if err.Error() == adapter.RecordNotFound.Error() {
+			HttpStatus.StatusNotfound(w, r, err)
+			return
+		}
 		HttpStatus.StatusInternalServerError(w, r, errors.New("error when create"))
 		return
 	}
@@ -109,6 +112,10 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := h.Controller.Remove(ID); err != nil {
+		if err.Error() == adapter.RecordNotFound.Error() {
+			HttpStatus.StatusNotfound(w, r, err)
+			return
+		}
 		HttpStatus.StatusInternalServerError(w, r, err)
 		return
 	}

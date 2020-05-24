@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/stretchr/testify/assert"
-	"github.com/wilian746/gorm-crud-generator/pkg/repository/adapter"
+	"github.com/wilian746/gorm-crud-generator/pkg/standart/repository/adapter"
 	"testing"
 )
 

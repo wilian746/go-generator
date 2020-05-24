@@ -23,10 +23,6 @@ func (resp *response) bytes() []byte {
 	return data
 }
 
-func (resp *response) string() string {
-	return string(resp.bytes())
-}
-
 func (resp *response) sendResponse(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -60,12 +56,6 @@ func StatusNotfound(w http.ResponseWriter, r *http.Request, err error) {
 // 405
 func StatusMethodNotAllowed(w http.ResponseWriter, r *http.Request) {
 	newResponse(nil, http.StatusMethodNotAllowed).sendResponse(w, r)
-}
-
-// 409
-func StatusConflict(w http.ResponseWriter, r *http.Request, err error) {
-	data := map[string]interface{}{"error": err.Error()}
-	newResponse(data, http.StatusConflict).sendResponse(w, r)
 }
 
 // 500

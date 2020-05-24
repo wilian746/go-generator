@@ -1,9 +1,12 @@
 package adapter
 
 import (
+	"errors"
 	"github.com/jinzhu/gorm"
-	"github.com/wilian746/gorm-crud-generator/pkg/repository/response"
+	"github.com/wilian746/gorm-crud-generator/pkg/standart/repository/response"
 )
+
+var RecordNotFound = errors.New("record not found")
 
 type Database struct {
 	connection *gorm.DB

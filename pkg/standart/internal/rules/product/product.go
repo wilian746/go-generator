@@ -7,9 +7,9 @@ import (
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
-	RepositoryEntity "github.com/wilian746/gorm-crud-generator/pkg/repository/entities"
 	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/entities"
 	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/entities/product"
+	RepositoryEntity "github.com/wilian746/gorm-crud-generator/pkg/standart/repository/entities"
 	"io"
 	"time"
 )

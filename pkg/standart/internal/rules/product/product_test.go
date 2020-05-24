@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"github.com/wilian746/gorm-crud-generator/pkg/repository/instance"
 	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/entities"
 	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/entities/product"
+	"github.com/wilian746/gorm-crud-generator/pkg/standart/repository/database"
 	"math"
 	"testing"
 	"time"
@@ -30,8 +30,7 @@ func TestRules_ConvertIoReaderToProduct(t *testing.T) {
 			},
 			Name: uuid.New().String(),
 		}
-		b, _ := data.Bytes()
-		products, err := r.ConvertIoReaderToProduct(bytes.NewReader(b))
+		products, err := r.ConvertIoReaderToProduct(bytes.NewReader(data.Bytes()))
 		assert.NoError(t, err)
 		assert.NotEmpty(t, products)
 	})
@@ -61,7 +60,7 @@ func TestRules_GetMock(t *testing.T) {
 func TestRules_Migrate(t *testing.T) {
 	t.Run("should migrate new table correctly", func(t *testing.T) {
 		r := NewRules()
-		conn := instance.GetConnection("sqlite3", ":memory:")
+		conn := database.GetConnection("sqlite3", ":memory:")
 		assert.NoError(t, conn.Error)
 		conn = r.Migrate(conn, r.GetMock())
 		assert.NoError(t, conn.Error)

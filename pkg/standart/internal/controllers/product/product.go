@@ -2,9 +2,8 @@ package product
 
 import (
 	"github.com/google/uuid"
-	"github.com/wilian746/gorm-crud-generator/pkg/repository/adapter"
 	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/entities/product"
-	"time"
+	"github.com/wilian746/gorm-crud-generator/pkg/standart/repository/adapter"
 )
 
 type Controller struct {
@@ -45,21 +44,24 @@ func (c *Controller) ListAll() (entities []product.Product, err error) {
 }
 
 func (c *Controller) Create(entity *product.Product) (uuid.UUID, error) {
-	entity.CreatedAt = time.Now()
+	entity.SetCreatedAt()
+	entity.GenerateID()
 	response := c.repository.Create(nil, &entity, entity.TableName())
-
 	if err := response.Error(); err != nil {
-		return entity.ID, err
+		return uuid.Nil, err
 	}
 
 	return entity.ID, nil
 }
 
 func (c *Controller) Update(id uuid.UUID, entity *product.Product) error {
-	entity.UpdatedAt = time.Now()
+	entity.SetUpdatedAt()
+	entity.ID = id
 
 	response := c.repository.Update(nil, map[string]interface{}{"id": id}, &entity, entity.TableName())
-
+	if response.Error() == nil && response.RowsAffected() == 0 {
+		return adapter.RecordNotFound
+	}
 	return response.Error()
 }
 
@@ -67,6 +69,8 @@ func (c *Controller) Remove(id uuid.UUID) error {
 	var entity product.Product
 
 	response := c.repository.Delete(nil, map[string]interface{}{"id": id}, &entity, entity.TableName())
-
+	if response.Error() == nil && response.RowsAffected() == 0 {
+		return adapter.RecordNotFound
+	}
 	return response.Error()
 }

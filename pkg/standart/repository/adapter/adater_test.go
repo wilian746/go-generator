@@ -4,8 +4,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
-	"github.com/wilian746/gorm-crud-generator/pkg/repository/instance"
-	defaultresponse "github.com/wilian746/gorm-crud-generator/pkg/repository/response"
+	"github.com/wilian746/gorm-crud-generator/pkg/standart/repository/database"
+	defaultresponse "github.com/wilian746/gorm-crud-generator/pkg/standart/repository/response"
 	"testing"
 	"time"
 )
@@ -23,7 +23,7 @@ func (p *Product) tableName() string {
 
 func GetMemoryDatabase(isTransaction bool) (*Product, *gorm.DB) {
 	product := &Product{}
-	connection := instance.GetConnection("sqlite3", ":memory:")
+	connection := database.GetConnection("sqlite3", ":memory:")
 	connection.Table(product.tableName()).AutoMigrate(product)
 	connection.Where("id != 0").Delete(product)
 
@@ -80,7 +80,7 @@ func TestNewAdapter(t *testing.T) {
 
 func TestDatabase_SetLogMode_GetLogMode(t *testing.T) {
 	t.Run("should setLog correctly", func(t *testing.T) {
-		connection := instance.GetConnection("sqlite3", ":memory:")
+		connection := database.GetConnection("sqlite3", ":memory:")
 		adapter := NewAdapter(connection)
 		adapter.SetLogMode(true)
 		assert.True(t, adapter.GetLogMode())
@@ -91,7 +91,7 @@ func TestDatabase_SetLogMode_GetLogMode(t *testing.T) {
 
 func TestDatabase_Connection(t *testing.T) {
 	product := &Product{}
-	connection := instance.GetConnection("sqlite3", ":memory:")
+	connection := database.GetConnection("sqlite3", ":memory:")
 	connection.Table(product.tableName()).AutoMigrate(&Product{})
 
 	t.Run("should return connection of type *gorm.DB", func(t *testing.T) {
@@ -102,7 +102,7 @@ func TestDatabase_Connection(t *testing.T) {
 
 func TestDatabase_ParseGormQueryToDefaultResponse(t *testing.T) {
 	product := &Product{}
-	connection := instance.GetConnection("sqlite3", ":memory:")
+	connection := database.GetConnection("sqlite3", ":memory:")
 	connection.Table(product.tableName()).AutoMigrate(&Product{})
 
 	t.Run("should return response of type *defaultresponse.Response", func(t *testing.T) {

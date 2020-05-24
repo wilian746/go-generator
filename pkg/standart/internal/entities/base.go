@@ -10,15 +10,3 @@ type Base struct {
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
-
-func (b *Base) GenerateID() {
-	b.ID = uuid.New()
-}
-
-func (b *Base) SetCreatedAt() {
-	b.CreatedAt = time.Now()
-}
-
-func (b *Base) SetUpdatedAt() {
-	b.UpdatedAt = time.Now()
-}

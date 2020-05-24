@@ -2,8 +2,8 @@ package health
 
 import (
 	"errors"
-	"github.com/wilian746/gorm-crud-generator/pkg/repository/adapter"
 	"github.com/wilian746/gorm-crud-generator/pkg/standart/internal/handlers"
+	"github.com/wilian746/gorm-crud-generator/pkg/standart/repository/adapter"
 	HttpStatus "github.com/wilian746/gorm-crud-generator/pkg/standart/utils/http"
 	"net/http"
 )

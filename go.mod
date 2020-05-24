@@ -12,10 +12,18 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/jinzhu/gorm v1.9.12
 	github.com/lib/pq v1.5.2 // indirect
+	github.com/lunixbochs/vtclean v1.0.0 // indirect
+	github.com/manifoldco/promptui v0.7.0
+	github.com/mattn/go-colorable v0.1.6 // indirect
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
+	github.com/otiai10/copy v1.2.0
+	github.com/spf13/cobra v1.0.0
+	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/stretchr/testify v1.5.1
 	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37 // indirect
-	gopkg.in/asaskevich/govalidator.v9 v9.0.0-20180315120708-ccb8e960c48f // indirect
+	golang.org/x/net v0.0.0-20190620200207-3b0461eec859 // indirect
+	golang.org/x/sys v0.0.0-20200523222454-059865788121 // indirect
+	golang.org/x/text v0.3.2 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 )
