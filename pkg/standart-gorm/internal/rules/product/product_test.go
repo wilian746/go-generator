@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/wilian746/go-generator/pkg/standart-gorm/internal/entities"
 	"github.com/wilian746/go-generator/pkg/standart-gorm/internal/entities/product"
-	"github.com/wilian746/go-generator/pkg/standart-gorm/repository/database"
+	"github.com/wilian746/go-generator/pkg/standart-gorm/pkg/repository/database"
 	"math"
 	"testing"
 	"time"

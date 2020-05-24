@@ -107,7 +107,7 @@ func (c *Command) initServer(db database.Database) error {
 	if err != nil {
 		return err
 	}
-	pathDestiny, err := c.prompt.Ask("Enter the full path of the directory destiny!", actualDirectory+"/tmp")
+	pathDestiny, err := c.prompt.Ask("Enter the full path of the directory destiny!", actualDirectory)
 	if err != nil {
 		return errors.ErrDirectoryPathInvalid
 	}
@@ -115,7 +115,7 @@ func (c *Command) initServer(db database.Database) error {
 	if lastChar == "/" {
 		pathDestiny = strings.TrimSuffix(pathDestiny, lastChar)
 	}
-	moduleName, err := c.prompt.Ask("Enter module of golang project", "")
+	moduleName, err := c.prompt.Ask("Enter module of golang project", "github.com/wilian746/go-generator/tmp")
 	if err != nil || moduleName == "" {
 		return errors.ErrModuleNameInvalid
 	}

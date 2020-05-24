@@ -3,7 +3,7 @@ package product
 import (
 	"github.com/google/uuid"
 	"github.com/wilian746/go-generator/pkg/standart-gorm/internal/entities/product"
-	"github.com/wilian746/go-generator/pkg/standart-gorm/repository/adapter"
+	"github.com/wilian746/go-generator/pkg/standart-gorm/pkg/repository/adapter"
 )
 
 type Controller struct {

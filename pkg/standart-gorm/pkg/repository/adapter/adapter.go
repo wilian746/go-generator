@@ -3,7 +3,7 @@ package adapter
 import (
 	"errors"
 	"github.com/jinzhu/gorm"
-	"github.com/wilian746/go-generator/pkg/standart-gorm/repository/response"
+	"github.com/wilian746/go-generator/pkg/standart-gorm/pkg/repository/response"
 )
 
 var ErrRecordNotFound = errors.New("record not found")

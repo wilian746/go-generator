@@ -7,8 +7,8 @@ import (
 	"github.com/wilian746/go-generator/pkg/standart-gorm/internal/controllers/product"
 	"github.com/wilian746/go-generator/pkg/standart-gorm/internal/handlers"
 	RulesProduct "github.com/wilian746/go-generator/pkg/standart-gorm/internal/rules/product"
-	"github.com/wilian746/go-generator/pkg/standart-gorm/repository/adapter"
-	HttpStatus "github.com/wilian746/go-generator/pkg/standart-gorm/utils/http"
+	HttpStatus "github.com/wilian746/go-generator/pkg/standart-gorm/internal/utils/http"
+	"github.com/wilian746/go-generator/pkg/standart-gorm/pkg/repository/adapter"
 	"net/http"
 )
 

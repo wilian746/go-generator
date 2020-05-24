@@ -3,10 +3,10 @@ package routes
 import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	ServerConfig "github.com/wilian746/go-generator/pkg/standart-gorm/config"
+	ServerConfig "github.com/wilian746/go-generator/pkg/standart-gorm/configs"
 	HealthHandler "github.com/wilian746/go-generator/pkg/standart-gorm/internal/handlers/health"
 	ProductHandler "github.com/wilian746/go-generator/pkg/standart-gorm/internal/handlers/product"
-	"github.com/wilian746/go-generator/pkg/standart-gorm/repository/adapter"
+	"github.com/wilian746/go-generator/pkg/standart-gorm/pkg/repository/adapter"
 )
 
 type Router struct {

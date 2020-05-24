@@ -5,8 +5,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	EntitiesProduct "github.com/wilian746/go-generator/pkg/standart-gorm/internal/entities/product"
 	RulesProduct "github.com/wilian746/go-generator/pkg/standart-gorm/internal/rules/product"
-	"github.com/wilian746/go-generator/pkg/standart-gorm/repository/adapter"
-	"github.com/wilian746/go-generator/pkg/standart-gorm/repository/database"
+	"github.com/wilian746/go-generator/pkg/standart-gorm/pkg/repository/adapter"
+	"github.com/wilian746/go-generator/pkg/standart-gorm/pkg/repository/database"
 	"testing"
 )
 

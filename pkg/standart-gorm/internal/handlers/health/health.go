@@ -3,8 +3,8 @@ package health
 import (
 	"errors"
 	"github.com/wilian746/go-generator/pkg/standart-gorm/internal/handlers"
-	"github.com/wilian746/go-generator/pkg/standart-gorm/repository/adapter"
-	HttpStatus "github.com/wilian746/go-generator/pkg/standart-gorm/utils/http"
+	HttpStatus "github.com/wilian746/go-generator/pkg/standart-gorm/internal/utils/http"
+	"github.com/wilian746/go-generator/pkg/standart-gorm/pkg/repository/adapter"
 	"net/http"
 )
 

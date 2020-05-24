@@ -9,7 +9,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/wilian746/go-generator/pkg/standart-gorm/internal/entities"
 	"github.com/wilian746/go-generator/pkg/standart-gorm/internal/entities/product"
-	RepositoryEntity "github.com/wilian746/go-generator/pkg/standart-gorm/repository/entities"
+	RepositoryEntity "github.com/wilian746/go-generator/pkg/standart-gorm/pkg/repository/entities"
 	"io"
 	"time"
 )

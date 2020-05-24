@@ -6,7 +6,7 @@ import (
 )
 
 func TestGetConfig(t *testing.T) {
-	t.Run("Should return config", func(t *testing.T) {
+	t.Run("Should return configs", func(t *testing.T) {
 		c := GetConfig()
 		assert.NotEmpty(t, c.DatabaseURI)
 		assert.NotEmpty(t, c.Dialect)

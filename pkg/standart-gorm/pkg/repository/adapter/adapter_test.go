@@ -4,8 +4,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
-	"github.com/wilian746/go-generator/pkg/standart-gorm/repository/database"
-	defaultresponse "github.com/wilian746/go-generator/pkg/standart-gorm/repository/response"
+	"github.com/wilian746/go-generator/pkg/standart-gorm/pkg/repository/database"
+	defaultresponse "github.com/wilian746/go-generator/pkg/standart-gorm/pkg/repository/response"
 	"testing"
 	"time"
 )

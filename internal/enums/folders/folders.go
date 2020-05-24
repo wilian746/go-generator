@@ -4,7 +4,7 @@ type Folders string
 
 const (
 	Cmd                        Folders = "cmd"
-	Config                     Folders = "config"
+	Config                     Folders = "configs"
 	Internal                   Folders = "internal"
 	InternalControllers        Folders = "internal/controllers"
 	InternalControllersProduct Folders = "internal/controllers/product"
@@ -16,15 +16,16 @@ const (
 	InternalRoutes             Folders = "internal/routes"
 	InternalRules              Folders = "internal/rules"
 	InternalRulesProduct       Folders = "internal/rules/product"
-	Repository                 Folders = "repository"
-	RepositoryAdapter          Folders = "repository/adapter"
-	RepositoryDatabase         Folders = "repository/database"
-	RepositoryEntities         Folders = "repository/entities"
-	RepositoryResponse         Folders = "repository/response"
-	Utils                      Folders = "utils"
-	UtilsEnvironment           Folders = "utils/environment"
-	UtilsHTTP                  Folders = "utils/http"
-	UtilsLogger                Folders = "utils/logger"
+	InternalUtils              Folders = "internal/utils"
+	InternalUtilsEnvironment   Folders = "internal/utils/environment"
+	InternalUtilsHTTP          Folders = "internal/utils/http"
+	InternalUtilsLogger        Folders = "internal/utils/logger"
+	Pkg                        Folders = "pkg/repository"
+	PkgRepository              Folders = "pkg/repository"
+	PkgRepositoryAdapter       Folders = "pkg/repository/adapter"
+	PkgRepositoryDatabase      Folders = "pkg/repository/database"
+	PkgRepositoryEntities      Folders = "pkg/repository/entities"
+	PkgRepositoryResponse      Folders = "pkg/repository/response"
 )
 
 func Values() []Folders {
@@ -42,14 +43,15 @@ func Values() []Folders {
 		InternalRoutes,
 		InternalRules,
 		InternalRulesProduct,
-		Repository,
-		RepositoryAdapter,
-		RepositoryDatabase,
-		RepositoryEntities,
-		RepositoryResponse,
-		Utils,
-		UtilsEnvironment,
-		UtilsHTTP,
-		UtilsLogger,
+		Pkg,
+		PkgRepository,
+		PkgRepositoryAdapter,
+		PkgRepositoryDatabase,
+		PkgRepositoryEntities,
+		PkgRepositoryResponse,
+		InternalUtils,
+		InternalUtilsEnvironment,
+		InternalUtilsHTTP,
+		InternalUtilsLogger,
 	}
 }
