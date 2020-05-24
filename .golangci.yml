@@ -79,12 +79,6 @@ linters:
     - varcheck
     - whitespace
 
-issues:
-  exclude-rules:
-    - path: pkg/repository/instance/
-      linters:
-        - golint
-
 service:
   golangci-lint-version: 1.23.x
   prepare:

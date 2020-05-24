@@ -6,6 +6,7 @@ import (
 	"github.com/wilian746/gorm-crud-generator/internal/enums/errors"
 	"github.com/wilian746/gorm-crud-generator/internal/utils/prompt"
 	"os"
+	"strings"
 )
 
 type Interface interface {
@@ -59,9 +60,13 @@ func (c *Command) initServer() error {
 	if err != nil {
 		return err
 	}
-	pathDestiny, err := c.prompt.Ask("Enter the full path of the directory destiny!", actualDirectory)
+	pathDestiny, err := c.prompt.Ask("Enter the full path of the directory destiny!", actualDirectory+"/tmp")
 	if err != nil {
 		return errors.ErrDirectoryPathInvalid
+	}
+	lastChar := pathDestiny[len(pathDestiny)-1:]
+	if lastChar == "/" {
+		pathDestiny = strings.TrimSuffix(pathDestiny, lastChar)
 	}
 	moduleName, err := c.prompt.Ask("Enter module of golang project", "")
 	if err != nil || moduleName == "" {
