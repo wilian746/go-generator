@@ -12,7 +12,7 @@ Currently an generator of code is:
 ## Usage
 ### Install in your local machine
 ```bash
-go get -u https://github.com/wilian746/go-generator/cmd/go-generator
+go get -u github.com/wilian746/go-generator/cmd/go-generator
 ```
 
 ### Check installation
