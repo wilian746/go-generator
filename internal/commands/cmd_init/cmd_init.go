@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	Server = "server"
+	App = "app"
 )
 
 type Interface interface {
@@ -68,7 +68,7 @@ func (c *Command) validateArgs(args []string) error {
 
 func (c *Command) getValidDBGenerator(db database.Database) ([]string, error) {
 	if database.Gorm == db {
-		return []string{Server}, nil
+		return []string{App}, nil
 	}
 	return []string{}, errors.ErrInitDbCmdInvalid
 }
@@ -84,7 +84,7 @@ func (c *Command) factoryDatabase(args []string) error {
 
 func (c *Command) gormInit(value string) error {
 	switch value {
-	case Server:
+	case App:
 		return c.initServer(database.Gorm)
 	default:
 		return errors.ErrInitTypeInvalid

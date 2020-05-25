@@ -23,7 +23,7 @@ go-generator
 ### Init application
 This command will copy all standart content using gorm library to path and module indicated  
  ```bash
-go-generator init gorm server
+go-generator init gorm app
  ```
 After running the command above it will ask you which is the directory you want to perform the standard installation.
 By default, it's already suggests the current directory as the installation location, but you can change it.
