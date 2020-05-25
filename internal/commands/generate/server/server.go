@@ -5,6 +5,8 @@ import (
 	"github.com/wilian746/go-generator/internal/enums/database"
 	"github.com/wilian746/go-generator/internal/enums/files"
 	"github.com/wilian746/go-generator/internal/enums/folders"
+	"github.com/wilian746/go-generator/internal/utils/environment"
+	"github.com/wilian746/go-generator/internal/utils/logger"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -52,7 +54,7 @@ func (s *Server) createFolders(pathDestiny string) error {
 
 func (s *Server) createFiles(pathDestiny, moduleName, databaseFolderName string) error {
 	for _, dir := range files.Values() {
-		fileContent, err := s.getFileStringFromRepository("pkg/" + databaseFolderName, string(dir))
+		fileContent, err := s.getFileStringFromRepository("pkg/"+databaseFolderName, string(dir))
 		if err != nil {
 			return err
 		}
@@ -65,20 +67,13 @@ func (s *Server) createFiles(pathDestiny, moduleName, databaseFolderName string)
 	return nil
 }
 
-func (s *Server) readContent(absPath string) ([]byte, error) {
-	actualFile, err := ioutil.ReadFile(absPath)
-	if err != nil {
-		return []byte{}, err
-	}
-	return actualFile, nil
-}
-
 func (s *Server) writeContent(pathDestiny, dir string, fileContent []byte) error {
 	absPath := fmt.Sprintf("%s/%s", pathDestiny, dir)
 	err := ioutil.WriteFile(absPath, fileContent, os.ModePerm)
 	if err != nil {
 		return err
 	}
+	logger.INFO("File generated with success: "+absPath, nil)
 	return nil
 }
 
@@ -116,7 +111,8 @@ func (s *Server) copyDefaultFiles(pathDestiny, moduleName string) error {
 }
 
 func (s *Server) getFileStringFromRepository(databaseFolderName, dir string) ([]byte, error) {
-	urlBase := "https://raw.githubusercontent.com/wilian746/go-generator/master"
+	latestVersionStable := environment.GetEnvString("GO_GENERATOR_TAG_NAME", "master")
+	urlBase := "https://raw.githubusercontent.com/wilian746/go-generator/" + latestVersionStable
 	url := fmt.Sprintf("%s/%s/%s", urlBase, databaseFolderName, dir)
 	request, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {

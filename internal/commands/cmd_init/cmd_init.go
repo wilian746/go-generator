@@ -70,7 +70,7 @@ func (c *Command) getValidDBGenerator(db database.Database) ([]string, error) {
 	if database.Gorm == db {
 		return []string{App}, nil
 	}
-	return []string{}, errors.ErrInitDbCmdInvalid
+	return []string{}, errors.ErrInitDBCmdInvalid
 }
 
 func (c *Command) factoryDatabase(args []string) error {
