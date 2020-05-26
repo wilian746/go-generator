@@ -9,7 +9,8 @@ __pycache__/
 *.so
 
 *.sqlite
-
+bin
+bin/
 .idea
 .vscode
 

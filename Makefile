@@ -9,4 +9,7 @@ lint:
 test:
 	go test ./... -timeout=2m -parallel=4
 
-all: fmt lint test
+build:
+	go build -o build.tmp ./cmd/go-generator/main.go
+
+all: fmt lint test build
