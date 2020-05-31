@@ -1,0 +1,246 @@
+definitions:
+  health.ResponseHealth:
+    properties:
+      result:
+        example: Service OK
+        type: string
+      status:
+        example: 200
+        type: integer
+    type: object
+  http.ResponseError:
+    properties:
+      result:
+        $ref: '#/definitions/http.errorData'
+        type: object
+      status:
+        type: integer
+    type: object
+  http.errorData:
+    properties:
+      error:
+        type: string
+    type: object
+  product.Product:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  product.RequestBodyToCreateOrUpdateProduct:
+    properties:
+      name:
+        type: string
+    type: object
+  product.ResponseCreateProduct:
+    properties:
+      id:
+        type: string
+    type: object
+  product.ResponseListAllProduct:
+    properties:
+      result:
+        items:
+          $ref: '#/definitions/product.Product'
+        type: array
+      status:
+        type: integer
+    type: object
+  product.ResponseListOneProduct:
+    properties:
+      result:
+        $ref: '#/definitions/product.Product'
+        type: object
+      status:
+        type: integer
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: Standart Gorm Support
+    url: https://github.com/wilian746/go-generator/issues
+  description: This is a sample server using standart gorm server.
+  license:
+    name: MIT
+    url: https://github.com/wilian746/go-generator/blob/master/LICENSE
+  termsOfService: http://swagger.io/terms/
+  title: Standart Gorm
+  version: "1.0"
+paths:
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: Check if Health  of service it's OK!
+      operationId: health
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/health.ResponseHealth'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.ResponseError'
+      security:
+      - ApiKeyAuth: []
+      tags:
+      - Health
+  /product:
+    get:
+      consumes:
+      - application/json
+      operationId: get-all-products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/product.ResponseListAllProduct'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.ResponseError'
+      summary: List all products
+      tags:
+      - Product
+    post:
+      consumes:
+      - application/json
+      operationId: post-product
+      parameters:
+      - description: Body of add product
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/product.RequestBodyToCreateOrUpdateProduct'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/product.ResponseCreateProduct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.ResponseError'
+      summary: Create an product
+      tags:
+      - Product
+  /product/{ID}:
+    delete:
+      consumes:
+      - application/json
+      operationId: delete-product
+      parameters:
+      - description: ID of the product
+        in: path
+        name: ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204": {}
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.ResponseError'
+      summary: Delete an product
+      tags:
+      - Product
+    get:
+      consumes:
+      - application/json
+      operationId: get-one-product
+      parameters:
+      - description: ID of the product
+        in: path
+        name: ID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/product.ResponseListOneProduct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.ResponseError'
+      summary: List product by id
+      tags:
+      - Product
+    put:
+      consumes:
+      - application/json
+      operationId: put-product
+      parameters:
+      - description: ID of the product
+        in: path
+        name: ID
+        required: true
+        type: string
+      - description: Body of update product
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/product.RequestBodyToCreateOrUpdateProduct'
+      produces:
+      - application/json
+      responses:
+        "204": {}
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.ResponseError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.ResponseError'
+      summary: Update an product
+      tags:
+      - Product
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

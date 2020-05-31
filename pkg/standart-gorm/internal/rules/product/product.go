@@ -20,7 +20,7 @@ func NewRules() *Rules {
 	return &Rules{}
 }
 
-func (p *Rules) ConvertIoReaderToProduct(data io.Reader) (model *product.Product, err error) {
+func (p *Rules) ConvertIoReaderToProduct(data io.Reader, id uuid.UUID) (model *product.Product, err error) {
 	if data == nil {
 		return model, errors.New("body is invalid")
 	}
@@ -28,7 +28,11 @@ func (p *Rules) ConvertIoReaderToProduct(data io.Reader) (model *product.Product
 	if err != nil {
 		return model, err
 	}
-
+	if id == uuid.Nil {
+		model.GenerateID()
+	} else {
+		model.ID = id
+	}
 	return model, p.Validate(model)
 }
 

@@ -7,10 +7,15 @@ const (
 	CmdMain                                 Files = "cmd/main.go"
 	ConfigsConfigs                          Files = "configs/configs.go"
 	ConfigsConfigsTest                      Files = "configs/configs_test.go"
+	DocsDocs                                Files = "docs/docs.go"
+	DocsSwaggerJSON                         Files = "docs/swagger.json"
+	DocsSwaggerYAML                         Files = "docs/swagger.yaml"
 	InternalControllersProductProduct       Files = "internal/controllers/product/product.go"
 	InternalControllersProductProductTest   Files = "internal/controllers/product/product_test.go"
 	InternalEntitiesBase                    Files = "internal/entities/base.go"
+	InternalEntitiesHealthSwaggerEntities   Files = "internal/entities/health/swagger_entities.go"
 	InternalEntitiesProductProduct          Files = "internal/entities/product/product.go"
+	InternalEntitiesProductSwaggerEntities  Files = "internal/entities/product/swagger_entities.go"
 	InternalHandlersInterface               Files = "internal/handlers/interface.go"
 	InternalHandlersProductProduct          Files = "internal/handlers/product/product.go"
 	InternalHandlersProductProductTest      Files = "internal/handlers/product/product_test.go"
@@ -35,6 +40,7 @@ const (
 	PkgRepositoryEntitiesInterface          Files = "pkg/repository/entities/interface.go"
 	PkgRepositoryResponseResponse           Files = "pkg/repository/response/response.go"
 	PkgRepositoryResponseResponseTest       Files = "pkg/repository/response/response_test.go"
+	Readme                                  Files = "README.md"
 	GitIgnore                               NoGo  = ".gitignore"
 	GolangCi                                NoGo  = ".golangci.yml"
 	Makefile                                NoGo  = "Makefile"
@@ -47,10 +53,15 @@ func Values() []Files {
 		CmdMain,
 		ConfigsConfigs,
 		ConfigsConfigsTest,
+		DocsDocs,
+		DocsSwaggerJSON,
+		DocsSwaggerYAML,
 		InternalControllersProductProduct,
 		InternalControllersProductProductTest,
 		InternalEntitiesBase,
 		InternalEntitiesProductProduct,
+		InternalEntitiesHealthSwaggerEntities,
+		InternalEntitiesProductSwaggerEntities,
 		InternalHandlersInterface,
 		InternalHandlersProductProduct,
 		InternalHandlersProductProductTest,
@@ -75,6 +86,7 @@ func Values() []Files {
 		PkgRepositoryEntitiesInterface,
 		PkgRepositoryResponseResponse,
 		PkgRepositoryResponseResponseTest,
+		Readme,
 	}
 }
 

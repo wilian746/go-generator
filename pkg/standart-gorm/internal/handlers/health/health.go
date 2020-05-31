@@ -2,6 +2,7 @@ package health
 
 import (
 	"errors"
+	_ "github.com/wilian746/go-generator/pkg/standart-gorm/internal/entities/health" // import used in swagger
 	"github.com/wilian746/go-generator/pkg/standart-gorm/internal/handlers"
 	HttpStatus "github.com/wilian746/go-generator/pkg/standart-gorm/internal/utils/http"
 	"github.com/wilian746/go-generator/pkg/standart-gorm/pkg/repository/adapter"
@@ -21,6 +22,15 @@ func NewHandler(repository adapter.Interface) handlers.Interface {
 	}
 }
 
+// @Tags Health
+// @Security ApiKeyAuth
+// @Description Check if Health  of service it's OK!
+// @ID health
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} health.ResponseHealth
+// @Failure 500 {object} http.ResponseError
+// @Router /health [get]
 func (h *Handler) Get(w http.ResponseWriter, r *http.Request) {
 	if !h.Repository.Health() {
 		HttpStatus.StatusInternalServerError(w, r, ErrRelationalNotOK)

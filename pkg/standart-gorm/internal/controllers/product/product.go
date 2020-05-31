@@ -45,7 +45,6 @@ func (c *Controller) ListAll() (entities []product.Product, err error) {
 
 func (c *Controller) Create(entity *product.Product) (uuid.UUID, error) {
 	entity.SetCreatedAt()
-	entity.GenerateID()
 	response := c.repository.Create(nil, &entity, entity.TableName())
 	if err := response.Error(); err != nil {
 		return uuid.Nil, err
@@ -56,12 +55,11 @@ func (c *Controller) Create(entity *product.Product) (uuid.UUID, error) {
 
 func (c *Controller) Update(id uuid.UUID, entity *product.Product) error {
 	entity.SetUpdatedAt()
-	entity.ID = id
-
-	response := c.repository.Update(nil, map[string]interface{}{"id": id}, &entity, entity.TableName())
-	if response.Error() == nil && response.RowsAffected() == 0 {
-		return adapter.ErrRecordNotFound
+	_, err := c.ListOne(id)
+	if err != nil {
+		return err
 	}
+	response := c.repository.Update(nil, map[string]interface{}{"id": id}, &entity, entity.TableName())
 	return response.Error()
 }
 

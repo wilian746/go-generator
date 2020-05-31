@@ -57,6 +57,7 @@ We generatated some codes to facilities the life of the developer.
     - `TIMEOUT` -> Timeout of routes in minutes;
     - `DATABASE_DIALECT` -> [Dialect usage in GORM](https://gorm.io/docs/connecting_to_the_database.html);
     - `DATABASE_URI` -> [Connection string usage in GORM](https://gorm.io/docs/connecting_to_the_database.html);
+- `/docs` This folder contains the docs of project using Swagger, you can this example of how to update/create using [swag](https://github.com/swaggo/swag); 
 - `/internal` This folder contains the internal implementations;
     - `/internal/controllers` This folder contains internal rules and conditions treatments of your application;
     - `/internal/entities` This folder contains entities usage to save in your database and manipulate data in project;
@@ -70,7 +71,7 @@ We generatated some codes to facilities the life of the developer.
     - `/pkg/repository/entities` This folder contains the Interface recommend to usage in your entities;
     - `/pkg/repository/response` This folder contains the Response your objective is all there queries executed will be standardized for a standard response, thus facilitating error handling and data conversions if necessary.
 
-## Plans?
+## Plans?who generated
 We are just getting started, the main objective is to aggregate several banks on a solid and consistent implementation basis so that all developers can save development time, so we have some activities that we will still do in the short, medium and long term.
 * Phase 1: Initial project implementation using relational database ✔ 
 * Phase 2: Integration with the MongoDB database ⌚️

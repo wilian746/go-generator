@@ -22,28 +22,29 @@ func TestNewRules(t *testing.T) {
 func TestRules_ConvertIoReaderToProduct(t *testing.T) {
 	t.Run("Should parse ioRead to product", func(t *testing.T) {
 		r := NewRules()
+		ID := uuid.New()
 		data := &product.Product{
 			Base: entities.Base{
-				ID:        uuid.New(),
+				ID:        ID,
 				CreatedAt: time.Now(),
 				UpdatedAt: time.Now(),
 			},
 			Name: uuid.New().String(),
 		}
-		products, err := r.ConvertIoReaderToProduct(bytes.NewReader(data.Bytes()))
+		products, err := r.ConvertIoReaderToProduct(bytes.NewReader(data.Bytes()), ID)
 		assert.NoError(t, err)
 		assert.NotEmpty(t, products)
 	})
 	t.Run("Should return err when parse data nil", func(t *testing.T) {
 		r := NewRules()
-		products, err := r.ConvertIoReaderToProduct(nil)
+		products, err := r.ConvertIoReaderToProduct(nil, uuid.New())
 		assert.Error(t, err)
 		assert.Nil(t, products)
 	})
 	t.Run("Should return err when parse data wrong", func(t *testing.T) {
 		r := NewRules()
 		b, _ := json.Marshal(math.NaN())
-		products, err := r.ConvertIoReaderToProduct(bytes.NewReader(b))
+		products, err := r.ConvertIoReaderToProduct(bytes.NewReader(b), uuid.New())
 		assert.Error(t, err)
 		assert.Nil(t, products)
 	})

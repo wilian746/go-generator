@@ -1,13 +1,17 @@
 package routes
 
 import (
+	"fmt"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/swaggo/http-swagger"
 	ServerConfig "github.com/wilian746/go-generator/pkg/standart-gorm/configs"
 	HealthHandler "github.com/wilian746/go-generator/pkg/standart-gorm/internal/handlers/health"
 	ProductHandler "github.com/wilian746/go-generator/pkg/standart-gorm/internal/handlers/product"
 	"github.com/wilian746/go-generator/pkg/standart-gorm/pkg/repository/adapter"
 )
+
+const BasePath = "/api/v1"
 
 type Router struct {
 	config *Config
@@ -24,6 +28,7 @@ func NewRouter() *Router {
 func (r *Router) SetRouters(repository adapter.Interface) *chi.Mux {
 	r.setConfigsRouters()
 
+	r.RouterSwagger()
 	r.RouterHealth(repository)
 	r.RouterProduct(repository)
 
@@ -39,10 +44,17 @@ func (r *Router) setConfigsRouters() {
 	r.EnableRealIP()
 }
 
+func (r *Router) RouterSwagger() {
+	swaggerHost := fmt.Sprintf("http://localhost:%v/swagger/doc.json", ServerConfig.GetConfig().Port)
+	r.router.Get("/swagger/*", httpSwagger.Handler(
+		httpSwagger.URL(swaggerHost),
+	))
+}
+
 func (r *Router) RouterHealth(repository adapter.Interface) {
 	handler := HealthHandler.NewHandler(repository)
 
-	r.router.Route("/health", func(route chi.Router) {
+	r.router.Route(BasePath+"/health", func(route chi.Router) {
 		route.Post("/", handler.Post)
 		route.Get("/", handler.Get)
 		route.Put("/", handler.Put)
@@ -54,7 +66,7 @@ func (r *Router) RouterHealth(repository adapter.Interface) {
 func (r *Router) RouterProduct(repository adapter.Interface) {
 	handler := ProductHandler.NewHandler(repository)
 
-	r.router.Route("/product", func(route chi.Router) {
+	r.router.Route(BasePath+"/product", func(route chi.Router) {
 		route.Post("/", handler.Post)
 		route.Get("/", handler.Get)
 		route.Get("/{ID}", handler.Get)
