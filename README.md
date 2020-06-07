@@ -57,7 +57,10 @@ We generatated some codes to facilities the life of the developer.
     - `TIMEOUT` -> Timeout of routes in minutes;
     - `DATABASE_DIALECT` -> [Dialect usage in GORM](https://gorm.io/docs/connecting_to_the_database.html);
     - `DATABASE_URI` -> [Connection string usage in GORM](https://gorm.io/docs/connecting_to_the_database.html);
+- `/deploymets` This folder contains the files of deployments to run dependences of server; 
 - `/docs` This folder contains the docs of project using Swagger, you can this example of how to update/create using [swag](https://github.com/swaggo/swag); 
+- `/migrations` This folder contains the migrations files with drivers specifics; 
+    - `/migrations/{DRIVER}` The folders are driver with your migrations files to up or down versions; 
 - `/internal` This folder contains the internal implementations;
     - `/internal/controllers` This folder contains internal rules and conditions treatments of your application;
     - `/internal/entities` This folder contains entities usage to save in your database and manipulate data in project;
