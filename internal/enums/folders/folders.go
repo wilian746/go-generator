@@ -6,6 +6,7 @@ const (
 	Cmd                        Folders = "cmd"
 	Configs                    Folders = "configs"
 	Docs                       Folders = "docs"
+	Deployments                Folders = "deployments"
 	Internal                   Folders = "internal"
 	InternalControllers        Folders = "internal/controllers"
 	InternalControllersProduct Folders = "internal/controllers/product"
@@ -22,6 +23,10 @@ const (
 	InternalUtilsEnvironment   Folders = "internal/utils/environment"
 	InternalUtilsHTTP          Folders = "internal/utils/http"
 	InternalUtilsLogger        Folders = "internal/utils/logger"
+	Migrations                 Folders = "migrations"
+	MigrationsMysql            Folders = "migrations/mysql"
+	MigrationsPostgres         Folders = "migrations/postgres"
+	MigrationsSQLServer        Folders = "migrations/sqlserver"
 	Pkg                        Folders = "pkg/repository"
 	PkgRepository              Folders = "pkg/repository"
 	PkgRepositoryAdapter       Folders = "pkg/repository/adapter"
@@ -35,6 +40,7 @@ func Values() []Folders {
 		Cmd,
 		Configs,
 		Docs,
+		Deployments,
 		Internal,
 		InternalControllers,
 		InternalControllersProduct,
@@ -57,5 +63,9 @@ func Values() []Folders {
 		InternalUtilsEnvironment,
 		InternalUtilsHTTP,
 		InternalUtilsLogger,
+		Migrations,
+		MigrationsMysql,
+		MigrationsPostgres,
+		MigrationsSQLServer,
 	}
 }

@@ -23,29 +23,28 @@ func NewController(repository adapter.Interface) Interface {
 }
 
 func (c *Controller) ListOne(id uuid.UUID) (entity product.Product, err error) {
-	response := c.repository.Find(nil, map[string]interface{}{"id": id}, &entity, entity.TableName())
-
+	query := c.repository.Connection(entity.TableName()).Where(map[string]interface{}{"id": id})
+	response := c.repository.Find(query, &entity, entity.TableName())
 	if err := response.Error(); err != nil {
-		return entity, err
+		return product.Product{}, err
 	}
 
 	return entity, nil
 }
 
 func (c *Controller) ListAll() (entities []product.Product, err error) {
-	var entity product.Product
-	response := c.repository.Find(nil, map[string]interface{}{}, &entities, entity.TableName())
-
+	entity := &product.Product{}
+	query := c.repository.Connection(entity.TableName())
+	response := c.repository.Find(query, &entities, entity.TableName())
 	if err := response.Error(); err != nil {
 		return entities, err
 	}
-
 	return entities, nil
 }
 
 func (c *Controller) Create(entity *product.Product) (uuid.UUID, error) {
 	entity.SetCreatedAt()
-	response := c.repository.Create(nil, &entity, entity.TableName())
+	response := c.repository.Create(entity, entity.TableName())
 	if err := response.Error(); err != nil {
 		return uuid.Nil, err
 	}
@@ -59,14 +58,14 @@ func (c *Controller) Update(id uuid.UUID, entity *product.Product) error {
 	if err != nil {
 		return err
 	}
-	response := c.repository.Update(nil, map[string]interface{}{"id": id}, &entity, entity.TableName())
+	response := c.repository.Update(map[string]interface{}{"id": id}, &entity, entity.TableName())
 	return response.Error()
 }
 
 func (c *Controller) Remove(id uuid.UUID) error {
 	var entity product.Product
 
-	response := c.repository.Delete(nil, map[string]interface{}{"id": id}, &entity, entity.TableName())
+	response := c.repository.Delete(map[string]interface{}{"id": id}, entity.TableName())
 	if response.Error() == nil && response.RowsAffected() == 0 {
 		return adapter.ErrRecordNotFound
 	}

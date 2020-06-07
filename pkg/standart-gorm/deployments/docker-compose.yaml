@@ -1,0 +1,38 @@
+version: '3'
+services:
+  postgresql:
+    container_name: postgresql
+    image: postgres
+    networks:
+      - horus_net
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    networks:
+      - horus_net
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mysql
+  sqlserver:
+    container_name: sqlserver
+    image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+    networks:
+      - horus_net
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: YourStrong@Passw0rd
+networks:
+  horus_net:
+
+volumes:
+  docker_vol:

@@ -22,10 +22,15 @@ type Interface interface {
 	ParseGormQueryToDefaultResponse(result *gorm.DB) *response.Response
 
 	Health() bool
-	Find(transaction *gorm.DB, condition, entity interface{}, tableName string) *response.Response
-	Create(transaction *gorm.DB, entity interface{}, tableName string) *response.Response
-	Update(transaction *gorm.DB, condition, entity interface{}, tableName string) *response.Response
-	Delete(transaction *gorm.DB, condition, entity interface{}, tableName string) *response.Response
+
+	StartTransaction() Interface
+	CommitTransaction() *response.Response
+	RollbackTransaction() *response.Response
+
+	Find(query *gorm.DB, entity interface{}, tableName string) *response.Response
+	Create(entity interface{}, tableName string) *response.Response
+	Update(condition, entity interface{}, tableName string) *response.Response
+	Delete(condition interface{}, tableName string) *response.Response
 }
 
 func NewAdapter(connection *gorm.DB) Interface {
@@ -51,38 +56,39 @@ func (d *Database) ParseGormQueryToDefaultResponse(query *gorm.DB) *response.Res
 	return response.NewDefaultResponse(query)
 }
 
-func (d *Database) getDatabaseConnection(transaction *gorm.DB, tableName string) *gorm.DB {
-	if transaction != nil {
-		return transaction.Table(tableName).LogMode(d.logMode)
-	}
-
-	return d.Connection(tableName)
-}
-
 func (d *Database) Health() bool {
 	return d.connection.DB().Ping() == nil
 }
 
-func (d *Database) Find(transaction *gorm.DB, condition, entity interface{}, tableName string) *response.Response {
-	connection := d.getDatabaseConnection(transaction, tableName)
-
-	return d.ParseGormQueryToDefaultResponse(connection.Where(condition).Find(entity))
+func (d *Database) StartTransaction() Interface {
+	d.connection = d.Connection("").Begin()
+	return d
 }
 
-func (d *Database) Create(transaction *gorm.DB, entity interface{}, tableName string) *response.Response {
-	connection := d.getDatabaseConnection(transaction, tableName)
-
-	return d.ParseGormQueryToDefaultResponse(connection.Create(entity))
+func (d *Database) CommitTransaction() *response.Response {
+	return d.ParseGormQueryToDefaultResponse(d.connection.Commit())
 }
 
-func (d *Database) Update(transaction *gorm.DB, condition, entity interface{}, tableName string) *response.Response {
-	connection := d.getDatabaseConnection(transaction, tableName)
-
-	return d.ParseGormQueryToDefaultResponse(connection.Where(condition).Updates(entity))
+func (d *Database) RollbackTransaction() *response.Response {
+	return d.ParseGormQueryToDefaultResponse(d.connection.Rollback())
 }
 
-func (d *Database) Delete(transaction *gorm.DB, condition, entity interface{}, tableName string) *response.Response {
-	connection := d.getDatabaseConnection(transaction, tableName)
+func (d *Database) Find(query *gorm.DB, entity interface{}, tableName string) *response.Response {
+	queryFind := query.Table(tableName).Find(entity)
+	return d.ParseGormQueryToDefaultResponse(queryFind)
+}
 
-	return d.ParseGormQueryToDefaultResponse(connection.Where(condition).Delete(entity))
+func (d *Database) Create(entity interface{}, tableName string) *response.Response {
+	queryCreate := d.Connection(tableName).Create(entity)
+	return d.ParseGormQueryToDefaultResponse(queryCreate)
+}
+
+func (d *Database) Update(condition, entity interface{}, tableName string) *response.Response {
+	queryUpdate := d.Connection(tableName).Where(condition).Update(entity)
+	return d.ParseGormQueryToDefaultResponse(queryUpdate)
+}
+
+func (d *Database) Delete(condition interface{}, tableName string) *response.Response {
+	queryDelete := d.Connection(tableName).Where(condition).Delete(nil)
+	return d.ParseGormQueryToDefaultResponse(queryDelete)
 }
