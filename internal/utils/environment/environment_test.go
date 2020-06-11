@@ -28,4 +28,8 @@ func TestGetEnvInt(t *testing.T) {
 		environment := GetEnvAndParseToInt("ENVIRONMENT", 123)
 		assert.Equal(t, environment, 987)
 	})
+	t.Run("Should not get default value of env empty", func(t *testing.T) {
+		environment := GetEnvAndParseToInt("", 123)
+		assert.Equal(t, environment, 123)
+	})
 }

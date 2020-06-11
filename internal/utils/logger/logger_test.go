@@ -6,7 +6,10 @@ import (
 )
 
 func TestPANIC(t *testing.T) {
-	t.Run("should not return panic", func(t *testing.T) {
-		assert.NotPanics(t, func() { INFO("Example error", nil) }, "The code did not panic")
+	t.Run("should not return panic without data", func(t *testing.T) {
+		assert.NotPanics(t, func() { INFO("Example error", nil) })
+	})
+	t.Run("should not return panic with data", func(t *testing.T) {
+		assert.NotPanics(t, func() { INFO("Example error", "some text") })
 	})
 }

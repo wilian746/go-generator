@@ -1,10 +1,10 @@
-package database
+package repository
 
 type Database string
 
 const (
-	Gorm    = "gorm"
-	Unknown = "unknown"
+	Gorm    Database = "gorm"
+	Unknown Database = "unknown"
 )
 
 func Values() []Database {
@@ -20,4 +20,8 @@ func ValueOf(value string) Database {
 		}
 	}
 	return Unknown
+}
+
+func Valid(value string) bool {
+	return ValueOf(value) != Unknown
 }

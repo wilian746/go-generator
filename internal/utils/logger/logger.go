@@ -9,3 +9,8 @@ func INFO(message string, data interface{}) {
 	}
 	log.Print(message, data)
 }
+
+func PRINT(messages string) {
+	log.SetFlags(0)
+	log.Println(messages)
+}

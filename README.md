@@ -1,6 +1,5 @@
-![headline](images/logo.jpeg)
-
 # [GO-GENERATOR](https://github.com/wilian746/go-generator)
+![headline](images/logo.jpeg)
 
 <p align="center">
   <a href="https://github.com/wilian746/go-generator/actions"><img src="https://img.shields.io/github/workflow/status/wilian746/go-generator/Go/master?label=Build"/></a>
@@ -8,10 +7,10 @@
 </p>
 
 ## What is GO-GENERATOR?
-Go generator is an simple command line interface to generate default files to start your implementation with go in a base pre-configurated.
-Currently an generator of code is:
-- [GORM](https://google.com) - This standart project integrated with relational database your connections is:
-    - PostgreSQL
+Go-Generator is a simple command line interface to generate default files to start your implementation with go in a base pre-configured.
+Currently, the generators of code is:
+- [GORM](https://google.com) - This standard project integrated with relational database your connections is:
+    - PostgresSQL
     - MySQL
     - SQLServer
     - SQLite3
@@ -27,8 +26,14 @@ go get -u github.com/wilian746/go-generator/cmd/go-generator
 go-generator
 ```
 
+### About the commands available
+- The commands currently available are:
+    - `go-generator help` -> You can see details and examples to run command
+    - `go-generator version` -> You can see actual version running
+    - `go-generator init [REPOSITORY] [GENERATE_TYPE]` -> You can run this command to generate new application using repository available:
+
 ### Init application
-This command will copy all standart content using gorm library to path and module indicated  
+This command will copy all standard content using gorm library to path and module indicated  
  ```bash
 go-generator init gorm app
  ```
@@ -48,9 +53,9 @@ See example!
     
 
 ## Generated structure
-### standart-gorm
+### standard-gorm
 This project follows the standard structure of the [golang-standard](https://github.com/golang-standards/project-layout).
-We generatated some codes to facilities the life of the developer.
+We generated some codes to facilities the life of the developer.
 - `/cmd` This folder contains the main project, you can see that the integration with the database starts here and it is passed on to the rest of the project. With that we solved some problems with the loss of connection with the database;
 - `/config` This folder contains the environments of the project they are:
     - `PORT` -> Port the application will run on;
@@ -84,7 +89,7 @@ We are just getting started, the main objective is to aggregate several banks on
 - And several other ideas...👁‍ 
 
 ## Issue?
-We are happy with your help, you can direct us by channel of [Issues](https://github.com/wilian746/go-generator/issues) that we will help with the greatest pleasure!
+We are happy with your help, you can direct us by a channel of [Issues](https://github.com/wilian746/go-generator/issues) that we will help with the greatest pleasure!
 
 ## Contributing
 Nice! Welcome to the team then! Just make your modification and open the [pull request](https://github.com/wilian746/go-generator/pulls). We ask that the branch of [develop](https://github.com/wilian746/go-generator/tree/develop) is always placed as a destination, because that way we can move up to production safe and tested implementations.

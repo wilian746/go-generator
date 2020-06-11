@@ -24,10 +24,7 @@ const (
 	InternalUtilsHTTP          Folders = "internal/utils/http"
 	InternalUtilsLogger        Folders = "internal/utils/logger"
 	Migrations                 Folders = "migrations"
-	MigrationsMysql            Folders = "migrations/mysql"
-	MigrationsPostgres         Folders = "migrations/postgres"
-	MigrationsSQLServer        Folders = "migrations/sqlserver"
-	Pkg                        Folders = "pkg/repository"
+	Pkg                        Folders = "pkg"
 	PkgRepository              Folders = "pkg/repository"
 	PkgRepositoryAdapter       Folders = "pkg/repository/adapter"
 	PkgRepositoryDatabase      Folders = "pkg/repository/database"
@@ -64,8 +61,5 @@ func Values() []Folders {
 		InternalUtilsHTTP,
 		InternalUtilsLogger,
 		Migrations,
-		MigrationsMysql,
-		MigrationsPostgres,
-		MigrationsSQLServer,
 	}
 }
