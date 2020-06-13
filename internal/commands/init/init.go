@@ -1,19 +1,17 @@
 package init
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/wilian746/go-generator/internal/controllers/generate/app"
 	"github.com/wilian746/go-generator/internal/enums/errors"
 	EnumsRepository "github.com/wilian746/go-generator/internal/enums/repository"
 	EnumsRepositoryGenerate "github.com/wilian746/go-generator/internal/enums/repository/generate"
-	"github.com/wilian746/go-generator/internal/utils/logger"
 	"github.com/wilian746/go-generator/internal/utils/prompt"
 	"os"
 	"strings"
 )
 
-type Interface interface {
+type ICommand interface {
 	Cmd() *cobra.Command
 	Execute(_ *cobra.Command, args []string) error
 }
@@ -23,7 +21,7 @@ type Command struct {
 	prompt prompt.Interface
 }
 
-func NewInitCommand(p prompt.Interface) Interface {
+func NewInitCommand(p prompt.Interface) ICommand {
 	cmd := &Command{
 		prompt: p,
 	}
@@ -73,7 +71,6 @@ func (c *Command) Init() {
 		},
 		RunE: c.Execute,
 	}
-	c.setupUsageCmd()
 }
 
 func (c *Command) initApp(db EnumsRepository.Database) error {
@@ -94,18 +91,4 @@ func (c *Command) initApp(db EnumsRepository.Database) error {
 		return errors.ErrModuleNameInvalid
 	}
 	return app.NewApp().CreateFoldersAndFiles(pathDestiny, moduleName, db)
-}
-
-func (c *Command) setupUsageCmd() {
-	c.cmd.SetUsageFunc(func(command *cobra.Command) error {
-		logPrint := fmt.Sprintf(`
-Usage:
-	go-generator init [REPOSITORY] [GENERATE_TYPE]
-
-Examples:
-	%s
-`, command.Example)
-		logger.PRINT(logPrint)
-		return nil
-	})
 }

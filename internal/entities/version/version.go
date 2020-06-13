@@ -1,16 +1,16 @@
 package version
 
-type Version struct {
-	Value string
+type ValueFlag struct {
+	Value interface{}
 }
 
-func (v *Version) String() string {
-	return v.Value
+func (v *ValueFlag) String() string {
+	return v.Value.(string)
 }
-func (v *Version) Set(value string) error {
+func (v *ValueFlag) Set(value string) error {
 	v.Value = value
 	return nil
 }
-func (v *Version) Type() string {
-	return ""
+func (v *ValueFlag) Type() string {
+	return "string"
 }

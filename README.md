@@ -23,7 +23,7 @@ go get -u github.com/wilian746/go-generator/cmd/go-generator
 
 ### Check installation
 ```bash
-go-generator
+go-generator version
 ```
 
 ### About the commands available

@@ -7,62 +7,50 @@ import (
 	"github.com/wilian746/go-generator/internal/enums/globals"
 	"github.com/wilian746/go-generator/internal/utils/logger"
 	"os"
+	"strings"
 )
 
-type Interface interface {
-	Cmd() *cobra.Command
-	PrintHelp(examples string, additionalInfo string)
-	Execute(_ *cobra.Command, _ []string) error
+type IHelp interface {
+	UsageHelp() *cobra.Command
 }
 
 type Help struct {
 	rootCmd *cobra.Command
-	cmd     *cobra.Command
+	infos   []string
 }
 
-func NewHelpCommand(rootCmd *cobra.Command) Interface {
+func NewHelpCommand(rootCmd *cobra.Command, infos ...string) IHelp {
 	version := &Help{
 		rootCmd: rootCmd,
+		infos:   infos,
 	}
-	version.Help()
 	return version
 }
 
-func (h *Help) Cmd() *cobra.Command {
-	return h.cmd
-}
-
-func (h *Help) Help() {
-	h.cmd = &cobra.Command{
-		Use:     "help",
-		Short:   "help about how usage any command",
-		Example: "go-generator version",
-		RunE:    h.Execute,
+func (h *Help) UsageHelp() *cobra.Command {
+	return &cobra.Command{
+		Use: "help",
+		Short: "Help about any command",
+		Example: "go-generator help",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			h.printHeader()
+			h.printAvailableCommands()
+			h.printAvailableFlags()
+			h.printAdditionalInformation()
+			return nil
+		},
 	}
 }
 
-func (h *Help) Execute(_ *cobra.Command, _ []string) error {
-	h.PrintHelp("go-generator init gorm app", "")
-	return nil
-}
-
-func (h *Help) PrintHelp(examples, additionalInfo string) {
-	h.printHeader(examples)
-	h.printAvailableCommands()
-	h.printAdditionalInformation(additionalInfo)
-}
-
-func (h *Help) printHeader(examples string) {
+func (h *Help) printHeader() {
 	logHeader := fmt.Sprintf(`
 %s
 Usage:
 	go-generator init [REPOSITORY] [GENERATE_TYPE]
 
 Examples:
-	%s
-
-Available Commands:
-`, globals.GoGeneratorHeader, examples)
+	go-generator init gorm app
+`, globals.GoGeneratorHeader)
 
 	logger.PRINT(logHeader)
 }
@@ -70,21 +58,57 @@ Available Commands:
 func (h *Help) printAvailableCommands() {
 	logTable := table.NewWriter()
 	logTable.SetOutputMirror(os.Stdout)
-	logTable.AppendHeader(table.Row{"Command", "Short Description"})
+	logTable.AppendHeader(table.Row{"Command", "Example", "Description"})
+	availableCommands := []string{}
 	for _, command := range h.rootCmd.Commands() {
-		logTable.AppendRow(table.Row{command.Name(), command.Short})
-		logTable.AppendSeparator()
+		existCommand := false
+		for _, existingCmd := range availableCommands {
+			if existingCmd == command.Name() {
+				existCommand = true
+				break
+			}
+		}
+		availableCommands = append(availableCommands, command.Name())
+		if len(availableCommands) == 0 || !existCommand {
+			logTable.AppendRow(table.Row{command.Name(), command.Example, command.Short})
+			logTable.AppendSeparator()
+		}
 	}
+	logger.PRINT("Available Commands:")
 	logTable.AppendSeparator()
 	logTable.Render()
 }
 
-func (h *Help) printAdditionalInformation(info string) {
+func (h *Help) printAvailableFlags() {
+	flags := h.rootCmd.Flags().FlagUsages()
+	allFlags := strings.Split(flags, "\n")
+	if len(allFlags) == 1 && strings.TrimSpace(allFlags[0]) == "" {
+		return
+	}
+
+	logTable := table.NewWriter()
+	logTable.SetOutputMirror(os.Stdout)
+	logTable.AppendHeader(table.Row{"Flag"})
+	for _, flag := range allFlags {
+		flagTrim := strings.TrimSpace(flag)
+		if flagTrim != "" {
+			logTable.AppendRow(table.Row{flagTrim})
+			logTable.AppendSeparator()
+		}
+	}
+	logger.PRINT("Available Flags:")
+	logTable.AppendSeparator()
+	logTable.Render()
+}
+
+func (h *Help) printAdditionalInformation() {
 	docsURL := "https://github.com/wilian746/go-generator#go-generator"
 	docsPrint := fmt.Sprintf(`
 Available Docs:
 You can access we docs in %s to more information!
-%s
-`, docsURL, info)
+`, docsURL)
+	for _, info := range h.infos {
+		docsPrint += info
+	}
 	logger.PRINT(docsPrint)
 }
