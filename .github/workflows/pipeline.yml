@@ -8,6 +8,7 @@ jobs:
   pipeline:
     name: Pipeline
     runs-on: ubuntu-latest
+    container: wilian746/semver
     steps:
       - name: Set up Go 1.x
         uses: actions/setup-go@v2
