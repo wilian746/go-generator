@@ -8,7 +8,6 @@ jobs:
   pipeline:
     name: Pipeline
     runs-on: ubuntu-latest
-    container: wilian746/semver
     steps:
       - name: Set up Go 1.x
         uses: actions/setup-go@v2
@@ -20,4 +19,5 @@ jobs:
       - name: fmt-lint-test-build
         run: |
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.27.0
+          go get -u github.com/wilian746/semver-cli/cmd/semver
           make all
