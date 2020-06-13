@@ -1,13 +1,16 @@
 #!/bin/sh
 
-VERSION=$1
+SEMVER_UP_TYPE=$1
 
-if [ "$VERSION" = "" ]; then
-  VERSION="latest"
+if [[ -z "$SEMVER_UP_TYPE" ]]; then
+  echo "SEMVER_UP_TYPE has not been specified, check and try again!"
+  exit 1
 fi
 
 chmod +x "./deployments/scripts/setup_version.sh"
-"./deployments/scripts/setup_version.sh"
+"./deployments/scripts/setup_version.sh" "$SEMVER_UP_TYPE"
+
+VERSION=$(semver get release)
 
 grep -q "{{VERSION_NOT_FOUND}}" "./internal/commands/version/version.go"
 if [ $? -eq 0 ]; then
@@ -24,6 +27,9 @@ fi
 
 docker build -t wilian746/go-generator:$VERSION -f ./deployments/Dockerfile .
 docker push wilian746/go-generator:$VERSION
+
+docker build -t wilian746/go-generator:latest -f ./deployments/Dockerfile .
+docker push wilian746/go-generator:latest
 
 "./deployments/scripts/setup_version.sh" "rollback"
 git add .

@@ -1,29 +1,22 @@
 #!/bin/sh
 
-TYPE=$1
+SEMVER_UP_TYPE=$1
 
-parse_yaml() {
-   local prefix=$2
-   local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
-   sed -ne "s|^\($s\)\($w\)$s:$s\"\(.*\)\"$s\$|\1$fs\2$fs\3|p" \
-        -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
-   awk -F$fs '{
-      indent = length($1)/2;
-      vname[indent] = $2;
-      for (i in vname) {if (i > indent) {delete vname[i]}}
-      if (length($3) > 0) {
-         vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("_")}
-         printf("%s%s%s=\"%s\"\n", "'$prefix'",vn, $2, $3);
-      }
-   }'
-}
+# semver is an CLI to update your version locally
+# for study you can see more in https://semver.org/
+# for install you can see more in https://github.com/wilian746/semver-cli
+if [ "$SEMVER_UP_TYPE" = "release" ]; then
+  semver up release
+elif [ "$SEMVER_UP_TYPE" = "minor" ]; then
+  semver up minor
+elif [ "$SEMVER_UP_TYPE" = "major" ]; then
+  semver up minor
+fi
 
-eval $(parse_yaml ".semver.yaml" "config_")
+ACTUAL_RELEASE=$(semver get release)
 
-RELEASE="$config_release"
-
-if [ "$TYPE" = "rollback" ]; then
-    sed -i -e "s/$RELEASE/{{VERSION_NOT_FOUND}}/g" "./internal/commands/version/version.go"
+if [ "$SEMVER_UP_TYPE" = "rollback" ]; then
+    sed -i -e "s/$ACTUAL_RELEASE/{{VERSION_NOT_FOUND}}/g" "./internal/commands/version/version.go"
 else
-    sed -i -e "s/{{VERSION_NOT_FOUND}}/$RELEASE/g" "./internal/commands/version/version.go"
+    sed -i -e "s/{{VERSION_NOT_FOUND}}/$ACTUAL_RELEASE/g" "./internal/commands/version/version.go"
 fi
