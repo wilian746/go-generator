@@ -25,7 +25,7 @@ func NewVersionCommand(rootCmd *cobra.Command) Interface {
 }
 
 func (v *Version) Execute(_ *cobra.Command, _ []string) error {
-	v.rootCmd.Version = "v0.1.7"
+	v.rootCmd.Version = "{{VERSION_NOT_FOUND}}"
 	logger.PRINT(fmt.Sprintf("Actual version installed of the Go-Generator is %s", v.rootCmd.Version))
 	return nil
 }

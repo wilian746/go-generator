@@ -25,4 +25,4 @@ fi
 docker build -t wilian746/go-generator:$VERSION -f ./deployments/Dockerfile .
 docker push wilian746/go-generator:$VERSION
 
-sh "./deployments/scripts/setup_version.sh" "rollback"
+"./deployments/scripts/setup_version.sh" "rollback"
