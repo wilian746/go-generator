@@ -19,5 +19,5 @@ jobs:
       - name: fmt-lint-test-build
         run: |
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.27.0
-          go get -u -t -v github.com/wilian746/semver-cli/cmd/semver
+          go get -u -t -v github.com/wilian746/semver-cli/cmd/semver@v1.0.0
           make all
