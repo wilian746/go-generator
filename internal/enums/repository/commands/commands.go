@@ -1,4 +1,4 @@
-package generate
+package commands
 
 type Command string
 
@@ -6,6 +6,10 @@ const (
 	App     Command = "app"
 	Unknown Command = "unknown"
 )
+
+func (c Command) String() string {
+	return string(c)
+}
 
 func Values() []Command {
 	return []Command{

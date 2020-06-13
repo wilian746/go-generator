@@ -52,6 +52,7 @@ const (
 	GoSum     NoGo = "go.sum"
 )
 
+// nolint
 func Values() []Files {
 	return []Files{
 		CmdMain,

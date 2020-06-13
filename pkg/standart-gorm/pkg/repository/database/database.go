@@ -17,7 +17,7 @@ func GetConnection(dialectName, uri string) *gorm.DB {
 	if !dialectIsAllowed(dialectName) && ErrDialectInvalid != nil {
 		log.Panic("Error", ErrDialectInvalid)
 	}
-	if uri == "" && ErrURIInvalid != nil {
+	if uri == "" {
 		log.Panic("Error", ErrURIInvalid)
 	}
 

@@ -16,18 +16,18 @@ import (
 const ImportModuleName = "github.com/wilian746/go-generator"
 
 type Interface interface {
-	CreateFoldersAndFiles(pathDestiny, moduleName string, db EnumsRepository.Database) error
+	CreateFoldersAndFiles(pathDestiny, moduleName string, db EnumsRepository.Repository) error
 }
 
 type App struct {
-	db EnumsRepository.Database
+	db EnumsRepository.Repository
 }
 
 func NewApp() Interface {
 	return &App{}
 }
 
-func (a *App) CreateFoldersAndFiles(pathDestiny, moduleName string, db EnumsRepository.Database) error {
+func (a *App) CreateFoldersAndFiles(pathDestiny, moduleName string, db EnumsRepository.Repository) error {
 	a.db = db
 	if err := a.createFolders(pathDestiny); err != nil {
 		return err

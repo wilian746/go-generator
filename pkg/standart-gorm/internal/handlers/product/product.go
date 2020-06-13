@@ -5,8 +5,8 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/google/uuid"
 	ControllersProduct "github.com/wilian746/go-generator/pkg/standart-gorm/internal/controllers/product"
-	_ "github.com/wilian746/go-generator/pkg/standart-gorm/internal/entities"         // import used in swagger
-	_ "github.com/wilian746/go-generator/pkg/standart-gorm/internal/entities/product" // import used in swagger
+	_ "github.com/wilian746/go-generator/pkg/standart-gorm/internal/entities" // import used in swagger
+	entitiesProduct "github.com/wilian746/go-generator/pkg/standart-gorm/internal/entities/product"
 	"github.com/wilian746/go-generator/pkg/standart-gorm/internal/handlers"
 	RulesProduct "github.com/wilian746/go-generator/pkg/standart-gorm/internal/rules/product"
 	HttpStatus "github.com/wilian746/go-generator/pkg/standart-gorm/internal/utils/http"
@@ -55,11 +55,7 @@ func (h *Handler) getOne(w http.ResponseWriter, r *http.Request) {
 
 	response, err := h.Controller.ListOne(ID)
 	if err != nil {
-		if err.Error() == adapter.ErrRecordNotFound.Error() {
-			HttpStatus.StatusNotfound(w, r, err)
-			return
-		}
-		HttpStatus.StatusInternalServerError(w, r, err)
+		validateErrorController(w, r, err)
 		return
 	}
 
@@ -77,7 +73,7 @@ func (h *Handler) getOne(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) getAll(w http.ResponseWriter, r *http.Request) {
 	response, err := h.Controller.ListAll()
 	if err != nil {
-		HttpStatus.StatusInternalServerError(w, r, err)
+		validateErrorController(w, r, err)
 		return
 	}
 
@@ -102,7 +98,7 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
 	}
 	ID, err := h.Controller.Create(productBody)
 	if err != nil {
-		HttpStatus.StatusInternalServerError(w, r, errors.New("error when create"))
+		validateErrorController(w, r, err)
 		return
 	}
 
@@ -122,28 +118,28 @@ func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
 // @Failure 500 {object} http.ResponseError
 // @Router /product/{ID} [put]
 func (h *Handler) Put(w http.ResponseWriter, r *http.Request) {
-	ID, err := uuid.Parse(chi.URLParam(r, "ID"))
-	if err != nil || ID == uuid.Nil {
-		HttpStatus.StatusBadRequest(w, r, errors.New("ID is not uuid valid"))
-		return
-	}
-
-	productBody, err := h.Rules.ConvertIoReaderToProduct(r.Body, ID)
+	ID, productBody, err := h.getBodyAndIDParam(r)
 	if err != nil {
 		HttpStatus.StatusBadRequest(w, r, err)
 		return
 	}
-
 	if err := h.Controller.Update(ID, productBody); err != nil {
-		if err.Error() == adapter.ErrRecordNotFound.Error() {
-			HttpStatus.StatusNotfound(w, r, err)
-			return
-		}
-		HttpStatus.StatusInternalServerError(w, r, errors.New("error when create"))
+		validateErrorController(w, r, err)
 		return
 	}
-
 	HttpStatus.StatusNoContent(w, r)
+}
+
+func (h *Handler) getBodyAndIDParam(r *http.Request) (uuid.UUID, *entitiesProduct.Product, error) {
+	ID, err := uuid.Parse(chi.URLParam(r, "ID"))
+	if err != nil || ID == uuid.Nil {
+		return uuid.Nil, &entitiesProduct.Product{}, errors.New("ID is not uuid valid")
+	}
+	productBody, err := h.Rules.ConvertIoReaderToProduct(r.Body, ID)
+	if err != nil {
+		return uuid.Nil, &entitiesProduct.Product{}, err
+	}
+	return ID, productBody, nil
 }
 
 // @Tags Product
@@ -163,17 +159,19 @@ func (h *Handler) Delete(w http.ResponseWriter, r *http.Request) {
 		HttpStatus.StatusBadRequest(w, r, errors.New("ID is not uuid valid"))
 		return
 	}
-
 	if err := h.Controller.Remove(ID); err != nil {
-		if err.Error() == adapter.ErrRecordNotFound.Error() {
-			HttpStatus.StatusNotfound(w, r, err)
-			return
-		}
-		HttpStatus.StatusInternalServerError(w, r, err)
+		validateErrorController(w, r, err)
 		return
 	}
-
 	HttpStatus.StatusNoContent(w, r)
+}
+
+func validateErrorController(w http.ResponseWriter, r *http.Request, err error) {
+	if err.Error() == adapter.ErrRecordNotFound.Error() {
+		HttpStatus.StatusNotfound(w, r, err)
+		return
+	}
+	HttpStatus.StatusInternalServerError(w, r, err)
 }
 
 func (h *Handler) Options(w http.ResponseWriter, r *http.Request) {

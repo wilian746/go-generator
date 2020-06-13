@@ -32,6 +32,7 @@ const (
 	PkgRepositoryResponse      Folders = "pkg/repository/response"
 )
 
+// nolint
 func Values() []Folders {
 	return []Folders{
 		Cmd,

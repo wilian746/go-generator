@@ -1,19 +1,23 @@
 package repository
 
-type Database string
+type Repository string
 
 const (
-	Gorm    Database = "gorm"
-	Unknown Database = "unknown"
+	Gorm    Repository = "gorm"
+	Unknown Repository = "unknown"
 )
 
-func Values() []Database {
-	return []Database{
+func (r Repository) String() string {
+	return string(r)
+}
+
+func Values() []Repository {
+	return []Repository{
 		Gorm,
 	}
 }
 
-func ValueOf(value string) Database {
+func ValueOf(value string) Repository {
 	for _, db := range Values() {
 		if string(db) == value {
 			return db

@@ -8,8 +8,7 @@ import (
 
 func GetFileFromGithub(routerGithub string) ([]byte, error) {
 	urlBase := "https://raw.githubusercontent.com/wilian746/go-generator/"
-	url := fmt.Sprintf("%s/%s", urlBase, routerGithub)
-	request, err := http.NewRequest(http.MethodGet, url, nil)
+	request, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/%s", urlBase, routerGithub), nil)
 	if err != nil {
 		return []byte{}, err
 	}

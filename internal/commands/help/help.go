@@ -58,25 +58,32 @@ Examples:
 func (h *Help) printAvailableCommands() {
 	logTable := table.NewWriter()
 	logTable.SetOutputMirror(os.Stdout)
+	logTable = h.addTableLogToCommands(logTable)
+	logger.PRINT("Available Commands:")
+	logTable.AppendSeparator()
+	logTable.Render()
+}
+
+func (h *Help) addTableLogToCommands(logTable table.Writer) table.Writer {
 	logTable.AppendHeader(table.Row{"Command", "Example", "Description"})
 	availableCommands := []string{}
 	for _, command := range h.rootCmd.Commands() {
-		existCommand := false
-		for _, existingCmd := range availableCommands {
-			if existingCmd == command.Name() {
-				existCommand = true
-				break
-			}
-		}
 		availableCommands = append(availableCommands, command.Name())
-		if len(availableCommands) == 0 || !existCommand {
+		if len(availableCommands) == 0 || !h.checkIfExistCommandAvailableInList(availableCommands, command) {
 			logTable.AppendRow(table.Row{command.Name(), command.Example, command.Short})
 			logTable.AppendSeparator()
 		}
 	}
-	logger.PRINT("Available Commands:")
-	logTable.AppendSeparator()
-	logTable.Render()
+	return logTable
+}
+
+func (h *Help) checkIfExistCommandAvailableInList(availableCommands []string, command *cobra.Command) bool {
+	for _, existingCmd := range availableCommands {
+		if existingCmd == command.Name() {
+			return true
+		}
+	}
+	return false
 }
 
 func (h *Help) printAvailableFlags() {
@@ -85,9 +92,16 @@ func (h *Help) printAvailableFlags() {
 	if len(allFlags) == 1 && strings.TrimSpace(allFlags[0]) == "" {
 		return
 	}
-
 	logTable := table.NewWriter()
+	logTable = h.addTableLogToFlags(logTable, allFlags)
 	logTable.SetOutputMirror(os.Stdout)
+
+	logger.PRINT("Available Flags:")
+	logTable.AppendSeparator()
+	logTable.Render()
+}
+
+func (h *Help) addTableLogToFlags(logTable table.Writer, allFlags []string) table.Writer {
 	logTable.AppendHeader(table.Row{"Flag"})
 	for _, flag := range allFlags {
 		flagTrim := strings.TrimSpace(flag)
@@ -96,9 +110,7 @@ func (h *Help) printAvailableFlags() {
 			logTable.AppendSeparator()
 		}
 	}
-	logger.PRINT("Available Flags:")
-	logTable.AppendSeparator()
-	logTable.Render()
+	return logTable
 }
 
 func (h *Help) printAdditionalInformation() {
