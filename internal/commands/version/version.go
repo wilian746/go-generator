@@ -22,7 +22,7 @@ func (v *Version) CmdVersion() *cobra.Command {
 		Short:   "Actual version installed of the Go-Generator",
 		Example: "go-generator version",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			logger.PRINT(cmd.Short + " is: {{VERSION_NOT_FOUND}}")
+			logger.PRINT(cmd.Short + " is: v0.1.15")
 			return nil
 		},
 	}
