@@ -10,6 +10,9 @@ test:
 	go test ./... -timeout=2m -parallel=4
 
 build:
-	go build -o build.tmp ./cmd/go-generator/main.go
+	chmod +x ./deployments/scripts/setup_version.sh
+	./deployments/scripts/setup_version.sh "no-changes"
+	go build -o go-generator.tmp ./cmd/go-generator/main.go
+	./deployments/scripts/setup_version.sh "rollback"
 
 all: fmt lint test build
