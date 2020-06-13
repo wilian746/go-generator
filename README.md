@@ -16,19 +16,32 @@ Currently, the generators of code is:
     - SQLite3
 
 ## Usage
-### Install in your local machine
+### Install in your local machine using GO
 ```bash
 go get -u github.com/wilian746/go-generator/cmd/go-generator
 ```
+- Check installation
+```bash
+go-generator version
+```
 
-### Check installation
+### Install in your local machine using Binary
+Change $version to your version the latest version is <img src="https://img.shields.io/github/v/tag/wilian746/go-generator?color=green&label="/>
+```bash
+wget https://github.com/wilian746/go-generator/releases/download/$version/go-generator && chmod +x go-generator && mv ./go-generator $HOME/bin/
+
+Example:
+wget https://github.com/wilian746/go-generator/releases/download/v0.1.18/go-generator && chmod +x go-generator && mv ./go-generator $HOME/bin/ 
+```
+
+- Check installation
 ```bash
 go-generator version
 ```
 
 ### About the commands available
 - The commands currently available are:
-    - `go-generator help` -> You can see details and examples to run command
+    - `go-generator help` -> You can see details and examples to run commands
     - `go-generator version` -> You can see actual version running
     - `go-generator init [REPOSITORY] [GENERATE_TYPE]` -> You can run this command to generate new application using repository available:
 
