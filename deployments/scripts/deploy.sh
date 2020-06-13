@@ -15,6 +15,8 @@ if [ $? -eq 0 ]; then
   exit 1
 fi
 
+git add .
+git commit -m "[skip_ci] Change Version"
 git tag $VERSION
 if [ $? -eq 0 ]; then
   git push origin tag $VERSION
