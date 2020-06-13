@@ -6,9 +6,9 @@ import (
 	"github.com/wilian746/go-generator/internal/enums/folders"
 	EnumsRepository "github.com/wilian746/go-generator/internal/enums/repository"
 	"github.com/wilian746/go-generator/internal/utils/environment"
+	"github.com/wilian746/go-generator/internal/utils/github"
 	"github.com/wilian746/go-generator/internal/utils/logger"
 	"io/ioutil"
-	"net/http"
 	"os"
 	"strings"
 )
@@ -139,17 +139,6 @@ func (a *App) copyDefaultFiles(pathDestiny, moduleName string) error {
 
 func (a *App) getFileStringFromRepository(databaseFolderName, dir string) ([]byte, error) {
 	latestVersionStable := environment.GetEnvString("GO_GENERATOR_TAG_NAME", "master")
-	urlBase := "https://raw.githubusercontent.com/wilian746/go-generator/" + latestVersionStable
-	url := fmt.Sprintf("%s/%s/%s", urlBase, databaseFolderName, dir)
-	request, err := http.NewRequest(http.MethodGet, url, nil)
-	if err != nil {
-		return []byte{}, err
-	}
-	client := http.Client{}
-	res, err := client.Do(request)
-	if err != nil {
-		return []byte{}, err
-	}
-	defer res.Body.Close()
-	return ioutil.ReadAll(res.Body)
+	routerGithub := fmt.Sprintf("%s/%s/%s", latestVersionStable, databaseFolderName, dir)
+	return github.GetFileFromGithub(routerGithub)
 }
