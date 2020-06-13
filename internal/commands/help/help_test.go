@@ -12,7 +12,7 @@ func TestVersionCommand_Execute(t *testing.T) {
 			root := &cobra.Command{}
 			root.AddCommand(&cobra.Command{Use: "test"})
 			cobraCmd := NewHelpCommand(root)
-			cobraCmd.Usage()
+			cobraCmd.CmdHelp()
 		})
 	})
 }

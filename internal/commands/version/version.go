@@ -18,8 +18,8 @@ func NewVersionCommand() IVersion {
 
 func (v *Version) CmdVersion() *cobra.Command {
 	return &cobra.Command{
-		Use: "version",
-		Short: "Actual version installed of the Go-Generator",
+		Use:     "version",
+		Short:   "Actual version installed of the Go-Generator",
 		Example: "go-generator version",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			logger.PRINT(cmd.Short + " is: {{VERSION_NOT_FOUND}}")

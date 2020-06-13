@@ -11,7 +11,7 @@ import (
 )
 
 type IHelp interface {
-	UsageHelp() *cobra.Command
+	CmdHelp() *cobra.Command
 }
 
 type Help struct {
@@ -27,10 +27,10 @@ func NewHelpCommand(rootCmd *cobra.Command, infos ...string) IHelp {
 	return version
 }
 
-func (h *Help) UsageHelp() *cobra.Command {
+func (h *Help) CmdHelp() *cobra.Command {
 	return &cobra.Command{
-		Use: "help",
-		Short: "Help about any command",
+		Use:     "help",
+		Short:   "Help about any command",
 		Example: "go-generator help",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			h.printHeader()

@@ -12,7 +12,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "go-generator",
+	Use: "go-generator",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		logger.PRINT("GO Generator is an command line interface to create your API using some databases more facility.")
 		logger.PRINT("")
@@ -28,7 +28,7 @@ func init() {
 	})
 	rootCmd.AddCommand(cmdInit.NewInitCommand(prompt.NewPrompt()).Cmd())
 	rootCmd.AddCommand(cmdVersion.NewVersionCommand().CmdVersion())
-	rootCmd.AddCommand(cmdHelp.NewHelpCommand(rootCmd).UsageHelp())
+	rootCmd.AddCommand(cmdHelp.NewHelpCommand(rootCmd).CmdHelp())
 }
 
 func main() {
