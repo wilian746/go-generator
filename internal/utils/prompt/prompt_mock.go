@@ -13,3 +13,8 @@ func (m *Mock) Ask(label, defaultValue string) (string, error) {
 	args := m.MethodCalled("Ask")
 	return args.Get(0).(string), utilsMock.ReturnNilOrError(args, 1)
 }
+
+func (m *Mock) Select(label string, items []string) (string, error) {
+	args := m.MethodCalled("Select")
+	return args.Get(0).(string), utilsMock.ReturnNilOrError(args, 1)
+}

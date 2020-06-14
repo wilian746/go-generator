@@ -20,6 +20,7 @@ require (
 	github.com/mailru/easyjson v0.7.1 // indirect
 	github.com/manifoldco/promptui v0.7.0
 	github.com/mattn/go-colorable v0.1.6 // indirect
+	github.com/sirupsen/logrus v1.6.0
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/testify v1.6.1

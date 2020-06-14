@@ -36,7 +36,7 @@ func (h *Handler) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 // @Tags Product
-// @Summary List product by id
+// @Summary ListPaths product by id
 // @ID get-one-product
 // @Accept  json
 // @Produce  json
@@ -63,7 +63,7 @@ func (h *Handler) getOne(w http.ResponseWriter, r *http.Request) {
 }
 
 // @Tags Product
-// @Summary List all products
+// @Summary ListPaths all products
 // @ID get-all-products
 // @Accept  json
 // @Produce  json

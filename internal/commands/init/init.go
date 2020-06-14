@@ -11,8 +11,9 @@ import (
 	"github.com/wilian746/go-generator/internal/utils/logger"
 	"github.com/wilian746/go-generator/internal/utils/prompt"
 	"os"
-	"strings"
 )
+
+const ModuleRestart = "restart"
 
 type ICommand interface {
 	Cmd() *cobra.Command
@@ -66,31 +67,139 @@ func (c *Command) Init() {
 }
 
 func (c *Command) initApp(db EnumsRepository.Repository) error {
-	pathDestiny, err := c.askPathDestiny()
+	hostname, username, projectName, err := c.getHostnameUsernameProjectName()
 	if err != nil {
 		return err
 	}
-	moduleName, err := c.prompt.Ask("Enter module of golang project", "github.com/wilian746/go-generator/tmp")
-	if err != nil || moduleName == "" {
-		return errors.ErrModuleNameInvalid
+	moduleName, err := c.askModuleCorrectly(hostname, username, projectName)
+	if err != nil {
+		return err
 	}
+	if moduleName == ModuleRestart {
+		return c.initApp(db)
+	}
+	return c.startCreateFoldersAndFiles(projectName, moduleName, db)
+}
+
+func (c *Command) startCreateFoldersAndFiles(projectName, moduleName string, db EnumsRepository.Repository) error {
+	pathDestiny, err := c.getDirectoryByProjectNameBySelect(projectName)
+	if err != nil {
+		return err
+	}
+	logger.INFO(fmt.Sprintf(`The template will generate with:
+	* Path of destiny = %s
+	* Module name of the project = %s
+`, pathDestiny, moduleName), nil)
 	return app.NewApp().CreateFoldersAndFiles(pathDestiny, moduleName, db)
 }
 
-func (c *Command) askPathDestiny() (string, error) {
+func (c *Command) getHostnameUsernameProjectName() (string, string, string, error) {
+	hostname, err := c.selectHostName()
+	if err != nil {
+		return "", "", "", err
+	}
+	username, err := c.askUsername()
+	if err != nil {
+		return "", "", "", err
+	}
+	projectName, err := c.askProjectName()
+	if err != nil {
+		return "", "", "", err
+	}
+	return hostname, username, projectName, nil
+}
+
+func (c *Command) getDirectoryByProjectNameBySelect(projectName string) (string, error) {
 	actualDirectory, err := os.Getwd()
 	if err != nil {
 		return "", err
 	}
-	pathDestiny, err := c.prompt.Ask("Enter the full path of the directory destiny!", actualDirectory)
+	path := fmt.Sprintf("%s/%s", actualDirectory, projectName)
+	response, err := c.prompt.Select(
+		fmt.Sprintf("The project will generated in path: `%s` is correct?", path), []string{"Y", "N"})
 	if err != nil {
 		return "", errors.ErrDirectoryPathInvalid
 	}
-	lastChar := pathDestiny[len(pathDestiny)-1:]
-	if lastChar == "/" {
-		pathDestiny = strings.TrimSuffix(pathDestiny, lastChar)
+	if response == "N" {
+		return c.getDirectoryByProjectNameByAsk(projectName, path)
 	}
-	return pathDestiny, nil
+	return path, nil
+}
+
+func (c *Command) getDirectoryByProjectNameByAsk(projectName, path string) (string, error) {
+	hostName, err := c.prompt.Ask("Enter with path of destiny of the your project", path)
+	if err != nil {
+		return "", errors.ErrDirectoryPathInvalid
+	}
+	if hostName == "" {
+		logger.ERROR("Invalid response!", errors.ErrDirectoryPathInvalid)
+		return c.getDirectoryByProjectNameBySelect(projectName)
+	}
+	return hostName, nil
+}
+
+func (c *Command) selectHostName() (string, error) {
+	logger.INFO("Create your module: STEP (1/3)", nil)
+	response, err := c.prompt.Select("Select your host of the repository",
+		[]string{"github.com", "gitlab.com", "bitbucket.org", "other"})
+	if err != nil {
+		return "", errors.ErrDirectoryPathInvalid
+	}
+	if response == "other" {
+		return c.askHostName()
+	}
+	return response, nil
+}
+
+func (c *Command) askHostName() (string, error) {
+	hostName, err := c.prompt.Ask("Enter with your hostname", "")
+	if err != nil {
+		return "", errors.ErrHostNameInvalid
+	}
+	if hostName == "" {
+		logger.ERROR("Invalid response!", errors.ErrHostNameInvalid)
+		return c.selectHostName()
+	}
+	return hostName, nil
+}
+
+func (c *Command) askUsername() (string, error) {
+	logger.INFO("Create your module: STEP (2/3)", nil)
+	username, err := c.prompt.Ask("Enter with the your username of the repository", "")
+	if err != nil {
+		return "", errors.ErrUsernameInvalid
+	}
+	if username == "" {
+		logger.ERROR("Invalid response!", errors.ErrUsernameInvalid)
+		return c.selectHostName()
+	}
+	return username, nil
+}
+
+func (c *Command) askProjectName() (string, error) {
+	logger.INFO("Create your module: STEP (3/3)", nil)
+	projectName, err := c.prompt.Ask("Enter with the your project name", "")
+	if err != nil {
+		return "", errors.ErrProjectNameInvalid
+	}
+	if projectName == "" {
+		logger.ERROR("Invalid response!", errors.ErrProjectNameInvalid)
+		return c.selectHostName()
+	}
+	return projectName, nil
+}
+
+func (c *Command) askModuleCorrectly(hostName, username, projectName string) (string, error) {
+	moduleName := fmt.Sprintf("%s/%s/%s", hostName, username, projectName)
+	label := fmt.Sprintf("The module created is: `%s` is correct?", moduleName)
+	response, err := c.prompt.Select(label, []string{"Y", "N"})
+	if err != nil {
+		return "", err
+	}
+	if response == "N" {
+		return ModuleRestart, nil
+	}
+	return moduleName, nil
 }
 
 func (c *Command) setUsageCommand() {

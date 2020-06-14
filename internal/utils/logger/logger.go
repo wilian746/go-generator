@@ -1,13 +1,20 @@
 package logger
 
-import "log"
+import (
+	"github.com/sirupsen/logrus" // nolint
+	"log"
+)
+
+func ERROR(message string, err error) {
+	logrus.Error(message, err.Error())
+}
 
 func INFO(message string, data interface{}) {
 	if data == nil {
-		log.Print(message)
+		logrus.Info(message)
 		return
 	}
-	log.Print(message, data)
+	logrus.Info(message, data)
 }
 
 func PRINT(messages string) {

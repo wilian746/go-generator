@@ -18,6 +18,7 @@ func TestCommand_Execute(t *testing.T) {
 	t.Run("Should execute command exec without error", func(t *testing.T) {
 		promptMock := &prompt.Mock{}
 		promptMock.On("Ask").Return(path, nil)
+		promptMock.On("Select").Return(path, nil)
 		cobraCmd := NewInitCommand(promptMock)
 		assert.NoError(t, cobraCmd.Execute(cobraCmd.Cmd(), []string{"gorm", "app"}))
 	})

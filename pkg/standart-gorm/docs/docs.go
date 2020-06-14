@@ -79,7 +79,7 @@ var doc = `{
                 "tags": [
                     "Product"
                 ],
-                "summary": "List all products",
+                "summary": "ListPaths all products",
                 "operationId": "get-all-products",
                 "responses": {
                     "200": {
@@ -152,7 +152,7 @@ var doc = `{
                 "tags": [
                     "Product"
                 ],
-                "summary": "List product by id",
+                "summary": "ListPaths product by id",
                 "operationId": "get-one-product",
                 "parameters": [
                     {

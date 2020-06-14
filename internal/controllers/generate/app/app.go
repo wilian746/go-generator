@@ -2,6 +2,8 @@ package app
 
 import (
 	"fmt"
+	"github.com/jedib0t/go-pretty/v6/progress"
+	printtree "github.com/wilian746/go-generator/internal/controllers/generate/app/print_tree"
 	"github.com/wilian746/go-generator/internal/enums/files"
 	"github.com/wilian746/go-generator/internal/enums/folders"
 	EnumsRepository "github.com/wilian746/go-generator/internal/enums/repository"
@@ -11,6 +13,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"time"
 )
 
 const ImportModuleName = "github.com/wilian746/go-generator"
@@ -20,7 +23,9 @@ type Interface interface {
 }
 
 type App struct {
-	db EnumsRepository.Repository
+	db                 EnumsRepository.Repository
+	pathOfFilesCreated []string
+	moduleName         string
 }
 
 func NewApp() Interface {
@@ -29,19 +34,34 @@ func NewApp() Interface {
 
 func (a *App) CreateFoldersAndFiles(pathDestiny, moduleName string, db EnumsRepository.Repository) error {
 	a.db = db
+	a.moduleName = moduleName
 	if err := a.createFolders(pathDestiny); err != nil {
 		return err
 	}
-	if err := a.factoryCopyContent(pathDestiny, moduleName); err != nil {
+	logger.INFO("", nil)
+	if err := a.factoryCopyContent(pathDestiny); err != nil {
 		return err
 	}
-	return a.copyDefaultFiles(pathDestiny, moduleName)
+	if err := a.copyDefaultFiles(pathDestiny); err != nil {
+		return err
+	}
+	return a.printAllFilesGenerated(pathDestiny)
 }
 
-func (a *App) factoryCopyContent(destiny, moduleName string) error {
+func (a *App) printAllFilesGenerated(pathDestiny string) error {
+	logger.INFO("============ All files was generated with success! ============", nil)
+	paths := []string{}
+	for _, value := range a.pathOfFilesCreated {
+		paths = append(paths, strings.ReplaceAll(value, pathDestiny, ""))
+	}
+	printtree.NewTree(paths, pathDestiny).Print()
+	return nil
+}
+
+func (a *App) factoryCopyContent(destiny string) error {
 	switch a.db {
 	case EnumsRepository.Gorm:
-		return a.createFiles(destiny, moduleName, "standart-gorm")
+		return a.createFiles(destiny, "standart-gorm")
 	default:
 		return nil
 	}
@@ -79,60 +99,88 @@ func (a *App) getFilesSliceToCreateByDatabase() []files.Files {
 	}
 }
 
-func (a *App) createFiles(pathDestiny, moduleName, databaseFolderName string) error {
-	for _, dir := range a.getFilesSliceToCreateByDatabase() {
+func (a *App) createFiles(pathDestiny, databaseFolderName string) error {
+	totalFiles := a.getFilesSliceToCreateByDatabase()
+	pw := a.getProgressInstance()
+	go pw.Render()
+	logger.INFO(fmt.Sprintf("Total of files of %s to generate: %v", databaseFolderName, len(totalFiles)), nil)
+	if err := a.loopToCreateFiles(totalFiles, databaseFolderName, pathDestiny, pw); err != nil {
+		return err
+	}
+	a.appendProgressPercentage(len(totalFiles)+1, len(totalFiles), pw)
+	time.Sleep(time.Second * 1)
+	pw.Stop()
+	return nil
+}
+
+func (a *App) loopToCreateFiles(
+	totalFiles []files.Files, databaseFolderName, pathDestiny string, pw progress.Writer) error {
+	for index, dir := range totalFiles {
 		fileContent, err := a.getFileStringFromRepository("pkg/"+databaseFolderName, string(dir))
 		if err != nil {
 			return err
 		}
 		if dir != files.Readme {
-			fileContent = a.replaceImportsToModuleName(fileContent, moduleName)
+			fileContent = a.replaceImportsToModuleName(fileContent)
 		}
-		err = a.writeContent(pathDestiny, string(dir), fileContent)
-		if err != nil {
+		if err := a.writeContent(pathDestiny, string(dir), fileContent); err != nil {
 			return err
 		}
+		a.appendProgressPercentage(index, len(totalFiles), pw)
 	}
 	return nil
 }
-
 func (a *App) writeContent(pathDestiny, dir string, fileContent []byte) error {
 	absPath := fmt.Sprintf("%s/%s", pathDestiny, dir)
 	err := ioutil.WriteFile(absPath, fileContent, os.ModePerm)
 	if err != nil {
 		return err
 	}
-	logger.PRINT("File generated with success: " + absPath)
+	a.pathOfFilesCreated = append(a.pathOfFilesCreated, absPath)
 	return nil
 }
 
-func (a *App) replaceImportsToModuleName(fileContent []byte, moduleName string) []byte {
+func (a *App) replaceImportsToModuleName(fileContent []byte) []byte {
 	importModule := ImportModuleName + "/pkg/standart-gorm"
 
-	fileContentReplaced := strings.ReplaceAll(string(fileContent), importModule, moduleName)
+	fileContentReplaced := strings.ReplaceAll(string(fileContent), importModule, a.moduleName)
 
 	return []byte(fileContentReplaced)
 }
 
-func (a *App) replaceModuleToModuleName(fileContent []byte, moduleName string) []byte {
-	fileContentReplaced := strings.ReplaceAll(string(fileContent), ImportModuleName, moduleName)
+func (a *App) replaceModuleToModuleName(fileContent []byte) []byte {
+	fileContentReplaced := strings.ReplaceAll(string(fileContent), ImportModuleName, a.moduleName)
 
 	return []byte(fileContentReplaced)
 }
 
-func (a *App) copyDefaultFiles(pathDestiny, moduleName string) error {
-	for _, dir := range files.ValuesNoGO() {
+func (a *App) copyDefaultFiles(pathDestiny string) error {
+	totalFiles := files.ValuesNoGO()
+	pw := a.getProgressInstance()
+	go pw.Render()
+	logger.INFO(fmt.Sprintf("Total of files default to generate: %v", len(totalFiles)), nil)
+	if err := a.loopToCreateFilesNoGo(pathDestiny, totalFiles, pw); err != nil {
+		return err
+	}
+	a.appendProgressPercentage(len(totalFiles)+1, len(totalFiles), pw)
+	time.Sleep(time.Second * 1)
+	pw.Stop()
+	return nil
+}
+
+func (a *App) loopToCreateFilesNoGo(pathDestiny string, totalFiles []files.NoGo, pw progress.Writer) error {
+	for index, dir := range files.ValuesNoGO() {
 		fileContent, err := a.getFileStringFromRepository("", string(dir))
 		if err != nil {
 			return err
 		}
 		if dir == files.GoMod {
-			fileContent = a.replaceModuleToModuleName(fileContent, moduleName)
+			fileContent = a.replaceModuleToModuleName(fileContent)
 		}
-		err = a.writeContent(pathDestiny, string(dir), fileContent)
-		if err != nil {
+		if err := a.writeContent(pathDestiny, string(dir), fileContent); err != nil {
 			return err
 		}
+		a.appendProgressPercentage(index, len(totalFiles), pw)
 	}
 	return nil
 }
@@ -141,4 +189,27 @@ func (a *App) getFileStringFromRepository(databaseFolderName, dir string) ([]byt
 	latestVersionStable := environment.GetEnvString("GO_GENERATOR_TAG_NAME", "master")
 	routerGithub := fmt.Sprintf("%s/%s/%s", latestVersionStable, databaseFolderName, dir)
 	return github.GetFileFromGithub(routerGithub)
+}
+
+func (a *App) getProgressInstance() progress.Writer {
+	pw := progress.NewWriter()
+	pw.ShowOverallTracker(false)
+	pw.ShowTime(false)
+	pw.ShowTracker(true)
+	pw.ShowValue(false)
+	pw.ShowPercentage(true)
+	pw.Style().Options.PercentFormat = "%5.2f%%"
+	pw.Style().Options.DoneString = ""
+	pw.Style().Options.Separator = ""
+	return pw
+}
+
+func (a *App) appendProgressPercentage(index, total int, pw progress.Writer) {
+	tracker := &progress.Tracker{
+		Units: progress.UnitsDefault,
+		Total: int64(total),
+	}
+	tracker.SetValue(int64(index))
+	tracker.IsDone()
+	pw.AppendTracker(tracker)
 }
