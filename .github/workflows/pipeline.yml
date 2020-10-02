@@ -3,6 +3,8 @@ name: Go
 on:
   push:
     branches: [ "master", "develop", "feature/**", "bugfix/**", "hotfix/**", "merge/**" ]
+  pull_request_target:
+    branches: [ "master", "develop", "feature/**", "bugfix/**", "hotfix/**", "merge/**" ]
 
 jobs:
   pipeline:
