@@ -1,0 +1,21 @@
+# Docker
+# Build a Docker image 
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- main
+
+resources:
+- repo: self
+
+stages:
+- stage: Security
+  displayName: Security
+  jobs:  
+  - job: Security
+    displayName: Security
+    pool:
+      vmImage: 'horuszup/horusec-cli:latest'
+    steps:
+    - script: sh /usr/local/bin/hoursec-cli.sh -p="./"
+      displayName: 'Horusec Security'
