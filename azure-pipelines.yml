@@ -5,4 +5,4 @@ pool:
   vmImage: 'ubuntu-18.04'
 
 steps:
-- script: curl -fsSL https://horusec.io/bin/install.sh | bash
+- script: curl -fsSL https://horusec.io/bin/install.sh | bash && horusec start -p ./
