@@ -15,7 +15,9 @@ stages:
   - job: Security
     displayName: Security
     pool:
-      vmImage: 'horuszup/horusec-cli:latest'
+      vmImage: 'ubuntu-latest'
+    container:
+      image: 'horuszup/horusec-cli:latest'
     steps:
     - script: sh /usr/local/bin/hoursec-cli.sh -p="./"
       displayName: 'Horusec Security'
