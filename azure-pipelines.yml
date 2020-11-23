@@ -1,13 +1,8 @@
 # Docker
 # Build a Docker image 
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
-resources:
-  containers:
-  - container: horusec
-    image: horuszup/horusec-cli
-
+pool:
+  vmImage: 'ubuntu-18.04'
+container: horuszup/horusec-cli
 steps:
 - script: sh /usr/local/bin/hoursec-cli.sh -p="./" -e="true"
-  target:
-    container: horusec
