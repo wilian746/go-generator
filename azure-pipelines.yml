@@ -3,6 +3,6 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 pool:
   vmImage: 'ubuntu-18.04'
-container: horuszup/horusec-cli
+
 steps:
-- script: sh /usr/local/bin/hoursec-cli.sh -p="./" -e="true"
+- script: curl -fsSL https://horusec.io/bin/install.sh | bash
